@@ -58,13 +58,13 @@ export default function Home() {
         {/* Circle 1 - Top Left Orange */}
         <div 
           className={`absolute bg-[#FF5900] rounded-full transition-all duration-1000 ease-in-out ${
-            screenShape === 'phone' ? '-left-60 -top-60 w-[600px] h-[600px]' :
-            screenShape === 'square' ? '-left-80 -top-80 w-[1000px] h-[1000px]' :
-            screenShape === 'classic' ? '-left-55 -top-55 w-[900px] h-[900px]' :
-            screenShape === 'mac' ? '-left-60 -top-60 w-[800px] h-[800px]' :
-            screenShape === 'wide_short' ? '-left-55 -top-55 w-[900px] h-[900px]' :
-            screenShape === 'wide' ? '-left-55 -top-55 w-[900px] h-[900px]' :
-            '-left-80 -top-125 w-[1200px] h-[1200px]' // ultrawide
+            screenShape === 'phone' ? '-left-[225px] -top-[225px] w-[600px] h-[600px]' :
+            screenShape === 'square' ? '-left-[375px] -top-[375px] w-[1000px] h-[1000px]' :
+            screenShape === 'classic' ? '-left-[338px] -top-[338px] w-[1000px] h-[1000px]' :
+            screenShape === 'mac' ? '-left-[300px] -top-[300px] w-[800px] h-[800px]' :
+            screenShape === 'wide_short' ? '-left-[338px] -top-[338px] w-[900px] h-[900px]' :
+            screenShape === 'wide' ? '-left-[338px] -top-[338px] w-[900px] h-[900px]' :
+            '-left-[250px] -top-[445px] w-[1200px] h-[1200px]' // ultrawide
           }`}
         ></div>
         
@@ -84,13 +84,13 @@ export default function Home() {
         {/* Circle 3 - Bottom Left Green */}
         <div 
           className={`absolute bg-[#B2FF00] rounded-full transition-all duration-1000 ease-in-out ${
-            screenShape === 'phone' ? '-left-60 top-[1400px] w-[600px] h-[600px]' :
-            screenShape === 'square' ? '-left-80 top-[1800px] w-[1000px] h-[1000px]' :
-            screenShape === 'classic' ? '-left-80 top-[1350px] w-[1000px] h-[1000px]' :
-            screenShape === 'mac' ? '-left-70 top-[1300px] w-[800px] h-[800px]' :
-            screenShape === 'wide_short' ? '-left-80 top-[1700px] w-[1000px] h-[1000px]' :
-            screenShape === 'wide' ? '-left-80 top-[1350px] w-[1000px] h-[1000px]' :
-            '-left-90 top-[1500px] w-[1000px] h-[1000px]' // ultrawide
+            screenShape === 'phone' ? '-left-[200px] top-[1400px] w-[600px] h-[600px]' :
+            screenShape === 'square' ? '-left-[325px] top-[1800px] w-[1000px] h-[1000px]' :
+            screenShape === 'classic' ? '-left-[325px] top-[1350px] w-[1000px] h-[1000px]' :
+            screenShape === 'mac' ? '-left-[266px] top-[1300px] w-[800px] h-[800px]' :
+            screenShape === 'wide_short' ? '-left-[325px] top-[1700px] w-[1000px] h-[1000px]' :
+            screenShape === 'wide' ? '-left-[325px] top-[1350px] w-[1000px] h-[1000px]' :
+            '-left-[325px] top-[1500px] w-[1000px] h-[1000px]' // ultrawide
           }`}
         ></div>
         
