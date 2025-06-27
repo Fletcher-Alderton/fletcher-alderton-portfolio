@@ -165,7 +165,7 @@ export default function Home() {
         screenShape === 'classic' ? 'min-h-[calc(65vh-1vh)]' :
         screenShape === 'mac' ? 'min-h-[calc(65vh-5vh)]' :
         screenShape === 'wide_short' ? 'min-h-[calc(70vh-5vh)]' :
-        screenShape === 'wide' ? 'min-h-[calc(70vh-4vh)]' :
+        screenShape === 'wide' ? 'min-h-[calc(70vh-5vh)]' :
         'min-h-[calc(100vh-25vh)]' // ultrawide
       }`}>
         <div className="max-w-7xl mx-auto w-full">
