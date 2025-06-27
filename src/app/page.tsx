@@ -14,19 +14,19 @@ export default function Home() {
     const aspectRatio = window.innerWidth / window.innerHeight;
     
     if (aspectRatio <= 3/4) {
-      setScreenShape('phone'); // Portrait phones and very tall screens
+      setScreenShape('phone'); // Portrait phones and very tall screens - too many to count
     } else if (aspectRatio <= 4/3) {
-      setScreenShape('square'); // 4:3 screens (old monitors, tablets)
+      setScreenShape('square'); // 4:3 screens (old monitors, tablets) - 1920x1440
     } else if (aspectRatio <= 3/2) {
-      setScreenShape('classic'); // 3:2 screens (Surface)
+      setScreenShape('classic'); // 3:2 screens (~1.5) - 1920x1280
     } else if (aspectRatio <= 1.58) {
-      setScreenShape('mac'); // Mac laptop screens (~1.54)
+      setScreenShape('mac'); // Mac laptop screens (~1.54) - 1512x982
     } else if (aspectRatio <= 1.7) {
-      setScreenShape('wide_short'); // 16:10 monitors (~1.6)
+      setScreenShape('wide_short'); // 16:10 monitors (~1.6) - 1920x1200
     } else if (aspectRatio <= 21/9) {
-      setScreenShape('wide'); // 16:9 and similar monitors (~1.78)
+      setScreenShape('wide'); // 16:9 and similar monitors (~1.78) - 1920x1080
     } else {
-      setScreenShape('ultrawide'); // 21:9 and wider ultrawide monitors
+      setScreenShape('ultrawide'); // 21:9 and wider ultrawide monitors - 2520x1080
     }
   };
 
@@ -57,66 +57,66 @@ export default function Home() {
       <div>
         {/* Circle 1 - Top Left Orange */}
         <div 
-          className={`absolute bg-[#FF5900] rounded-full opacity-90 transition-all duration-1000 ease-in-out ${
+          className={`absolute bg-[#FF5900] rounded-full transition-all duration-1000 ease-in-out ${
             screenShape === 'phone' ? '-left-60 -top-60 w-[600px] h-[600px]' :
             screenShape === 'square' ? '-left-80 -top-80 w-[1000px] h-[1000px]' :
-            screenShape === 'classic' ? '-left-60 -top-60 w-[700px] h-[700px]' :
+            screenShape === 'classic' ? '-left-55 -top-55 w-[900px] h-[900px]' :
             screenShape === 'mac' ? '-left-60 -top-60 w-[800px] h-[800px]' :
             screenShape === 'wide_short' ? '-left-55 -top-55 w-[900px] h-[900px]' :
             screenShape === 'wide' ? '-left-55 -top-55 w-[900px] h-[900px]' :
-            '-left-100 -top-100 w-[1400px] h-[1400px]' // ultrawide
+            '-left-80 -top-125 w-[1200px] h-[1200px]' // ultrawide
           }`}
         ></div>
         
         {/* Circle 2 - Right Blue */}
         <div 
-          className={`absolute bg-[#008CFF] rounded-full opacity-90 transition-all duration-1000 ease-in-out ${
+          className={`absolute bg-[#008CFF] rounded-full transition-all duration-1000 ease-in-out ${
             screenShape === 'phone' ? 'right-[-200px] top-[400px] w-[500px] h-[500px]' :
             screenShape === 'square' ? 'right-[-250px] top-[600px] w-[800px] h-[800px]' :
-            screenShape === 'classic' ? 'right-[-250px] top-[500px] w-[600px] h-[600px]' :
+            screenShape === 'classic' ? 'right-[-300px] top-[700px] w-[750px] h-[750px]' :
             screenShape === 'mac' ? 'right-[-325px] top-[600px] w-[650px] h-[650px]' :
             screenShape === 'wide_short' ? 'right-[-300px] top-[700px] w-[750px] h-[750px]' :
             screenShape === 'wide' ? 'right-[-300px] top-[700px] w-[750px] h-[750px]' :
-            'right-[-400px] top-[800px] w-[1200px] h-[1200px]' // ultrawide
+            'right-[-350px] top-[650px] w-[850px] h-[850px]' // ultrawide
           }`}
         ></div>
         
         {/* Circle 3 - Bottom Left Green */}
         <div 
-          className={`absolute bg-[#B2FF00] rounded-full opacity-90 transition-all duration-1000 ease-in-out ${
+          className={`absolute bg-[#B2FF00] rounded-full transition-all duration-1000 ease-in-out ${
             screenShape === 'phone' ? '-left-60 top-[1400px] w-[600px] h-[600px]' :
             screenShape === 'square' ? '-left-80 top-[1800px] w-[1000px] h-[1000px]' :
-            screenShape === 'classic' ? '-left-60 top-[950px] w-[650px] h-[650px]' :
+            screenShape === 'classic' ? '-left-80 top-[1350px] w-[1000px] h-[1000px]' :
             screenShape === 'mac' ? '-left-70 top-[1300px] w-[800px] h-[800px]' :
             screenShape === 'wide_short' ? '-left-80 top-[1700px] w-[1000px] h-[1000px]' :
             screenShape === 'wide' ? '-left-80 top-[1350px] w-[1000px] h-[1000px]' :
-            '-left-100 top-[2200px] w-[1200px] h-[1200px]' // ultrawide
+            '-left-90 top-[1500px] w-[1000px] h-[1000px]' // ultrawide
           }`}
         ></div>
         
         {/* Circle 4 - Bottom Left Blue */}
         <div 
-          className={`absolute bg-[#008CFF] rounded-full opacity-90 transition-all duration-1000 ease-in-out ${
+          className={`absolute bg-[#008CFF] rounded-full transition-all duration-1000 ease-in-out ${
             screenShape === 'phone' ? 'left-[-200px] bottom-[-200px] w-[500px] h-[500px]' :
             screenShape === 'square' ? 'left-[-250px] bottom-[-250px] w-[700px] h-[700px]' :
-            screenShape === 'classic' ? 'left-[-200px] bottom-[-200px] w-[550px] h-[550px]' :
+            screenShape === 'classic' ? 'left-[-250px] bottom-[-250px] w-[700px] h-[700px]' :
             screenShape === 'mac' ? 'left-[-250px] bottom-[-250px] w-[650px] h-[650px]' :
             screenShape === 'wide_short' ? 'left-[-250px] bottom-[-250px] w-[700px] h-[700px]' :
             screenShape === 'wide' ? 'left-[-250px] bottom-[-250px] w-[700px] h-[700px]' :
-            'left-[-400px] bottom-[-400px] w-[1000px] h-[1000px]' // ultrawide
+            'left-[-300px] bottom-[-300px] w-[800px] h-[800px]' // ultrawide
           }`}
         ></div>
         
         {/* Circle 5 - Bottom Right Orange */}
         <div 
-          className={`absolute bg-[#FF5900] rounded-full opacity-90 transition-all duration-1000 ease-in-out ${
+          className={`absolute bg-[#FF5900] rounded-full transition-all duration-1000 ease-in-out ${
             screenShape === 'phone' ? 'right-[-300px] bottom-[0px] w-[600px] h-[600px]' :
-            screenShape === 'square' ? 'right-[-350px] bottom-[0px] w-[800px] h-[800px]' :
-            screenShape === 'classic' ? 'right-[-320px] bottom-[0px] w-[650px] h-[650px]' :
-            screenShape === 'mac' ? 'right-[-320px] bottom-[0px] w-[650px] h-[650px]' :
+            screenShape === 'square' ? 'right-[-400px] bottom-[0px] w-[800px] h-[800px]' :
+            screenShape === 'classic' ? 'right-[-450px] bottom-[0px] w-[1000px] h-[1000px]' :
+            screenShape === 'mac' ? 'right-[-325px] bottom-[0px] w-[650px] h-[650px]' :
             screenShape === 'wide_short' ? 'right-[-450px] bottom-[0px] w-[738px] h-[738px]' :
             screenShape === 'wide' ? 'right-[-450px] bottom-[0px] w-[738px] h-[738px]' :
-            'right-[-500px] bottom-[0px] w-[1100px] h-[1100px]' // ultrawide
+            'right-[-480px] bottom-[0px] w-[850px] h-[850px]' // ultrawide
           }`}
         ></div>
       </div>
@@ -161,12 +161,12 @@ export default function Home() {
       {/* About Section */}
       <section id="info" className={`relative z-10 px-4 sm:px-6 lg:px-8 flex items-center transition-all duration-1000 ease-in-out ${
         screenShape === 'phone' ? 'min-h-[calc(50vh-4vh)]' :
-        screenShape === 'square' ? 'min-h-[calc(61vh-1vh)]' :
-        screenShape === 'classic' ? 'min-h-[calc(60vh-4vh)]' :
+        screenShape === 'square' ? 'min-h-[calc(63vh-1vh)]' :
+        screenShape === 'classic' ? 'min-h-[calc(65vh-1vh)]' :
         screenShape === 'mac' ? 'min-h-[calc(65vh-5vh)]' :
         screenShape === 'wide_short' ? 'min-h-[calc(70vh-5vh)]' :
-        screenShape === 'wide' ? 'min-h-[calc(70vh-5vh)]' :
-        'min-h-[calc(100vh-21vh)]' // ultrawide
+        screenShape === 'wide' ? 'min-h-[calc(70vh-4vh)]' :
+        'min-h-[calc(100vh-25vh)]' // ultrawide
       }`}>
         <div className="max-w-7xl mx-auto w-full">
           <div className={`flex transition-all duration-1000 ease-in-out ${
@@ -175,14 +175,14 @@ export default function Home() {
             <div className={`transition-all duration-1000 ease-in-out ${
               screenShape === 'classic' ? 'max-w-lg mr-18' : 'max-w-2xl md:mr-8 lg:mr-16'
             }`}>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-4xl font-serif italic text-black mb-3 md:mb-4">About me!</h2>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-serif italic text-black mb-3 md:mb-4">About me!</h2>
               <div className="w-32 sm:w-40 md:w-48 h-px bg-black mb-6 md:mb-8"></div>
               <p className={`font-serif text-black leading-relaxed transition-all duration-1000 ease-in-out ${
                 screenShape === 'ultrawide' ? 'text-3xl' :
-                screenShape === 'classic' ? 'text-lg' :
+                screenShape === 'classic' ? 'text-2xl' :
                 screenShape === 'wide' ? 'text-2xl' :
                 screenShape === 'wide_short' ? 'text-xl' :
-                'text-lg sm:text-xl md:text-2xl lg:text-xl'
+                'text-lg sm:text-xl md:text-2xl lg:text-xl '
               }`}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla 
                 eget justo nec sapien malesuada placerat. Phasellus id est tortor, 
@@ -203,7 +203,7 @@ export default function Home() {
       <section id="projects" className="relative z-10 px-2 sm:px-4 md:px-6 lg:px-8 min-h-screen flex items-center">
         <div className="max-w-none mx-auto w-full">
           <h2 className={`font-serif italic text-black mb-3 md:mb-4 transition-all duration-1000 ease-in-out ${
-            screenShape === 'classic' ? 'text-4xl' : 'text-3xl sm:text-4xl md:text-5xl'
+            screenShape === 'classic' ? 'text-3xl sm:text-4xl md:text-5xl' : 'text-3xl sm:text-4xl md:text-5xl'
           }`}>My Projects</h2>
           <div className="w-40 sm:w-44 md:w-52 h-px bg-black mb-8 md:mb-12 lg:mb-16"></div>
           
@@ -264,7 +264,7 @@ export default function Home() {
           {/* Header with underline - centered */}
           <div className="text-center mb-20">
             <h2 className={`font-serif italic text-black mb-4 transition-all duration-1000 ease-in-out ${
-              screenShape === 'classic' ? 'text-4xl' : 'text-4xl md:text-5xl'
+              screenShape === 'classic' ? 'text-4xl md:text-5xl' : 'text-4xl md:text-5xl'
             }`}>Get in contact</h2>
             <div className="w-60 h-px bg-black mx-auto"></div>
           </div>
@@ -273,12 +273,12 @@ export default function Home() {
             {/* Your Name Input - nearly center but slightly to the left */}
             <div className="absolute left-1/2 transform -translate-x-1/2 translate-x-[-80px] w-80">
               <label className={`block font-serif text-black mb-4 transition-all duration-1000 ease-in-out ${
-                screenShape === 'classic' ? 'text-lg' : 'text-2xl md:text-3xl'
+                screenShape === 'classic' ? 'text-2xl md:text-3xl' : 'text-2xl md:text-3xl'
               }`}>Your Name</label>
               <input 
                 type="text" 
                 className={`w-full border border-black bg-transparent px-4 focus:outline-none focus:ring-0 transition-all duration-1000 ease-in-out ${
-                  screenShape === 'classic' ? 'h-12' : 'h-14'
+                  screenShape === 'classic' ? 'h-14' : 'h-14'
                 }`}
               />
             </div>
@@ -290,24 +290,26 @@ export default function Home() {
               'translate-x-[120px]'
             }`}>
               <label className={`block font-serif text-black mb-4 transition-all duration-1000 ease-in-out ${
-                screenShape === 'classic' ? 'text-lg' : 'text-2xl md:text-3xl'
+                screenShape === 'classic' ? 'text-2xl md:text-3xl' : 'text-2xl md:text-3xl'
               }`}>Email</label>
               <input 
                 type="email" 
                 className={`w-full border border-black bg-transparent px-4 focus:outline-none focus:ring-0 transition-all duration-1000 ease-in-out ${
-                  screenShape === 'classic' ? 'h-12' : 'h-14'
+                  screenShape === 'classic' ? 'h-14' : 'h-14'
                 }`}
               />
             </div>
             
             {/* A little Note - off-center to the left, further than Your Name */}
-            <div className="absolute top-96 left-1/2 transform -translate-x-1/2 translate-x-[-200px] w-[500px]">
+            <div className={`absolute top-96 left-1/2 transform -translate-x-1/2 transition-all duration-1000 ease-in-out ${
+              screenShape === 'classic' ? 'translate-x-[-200px] w-[400px]' : 'translate-x-[-200px] w-[500px]'
+            }`}>
               <label className={`block font-serif text-black mb-4 transition-all duration-1000 ease-in-out ${
-                screenShape === 'classic' ? 'text-lg' : 'text-2xl md:text-3xl'
+                screenShape === 'classic' ? 'text-2xl md:text-3xl' : 'text-2xl md:text-3xl'
               }`}>A little Note</label>
               <textarea 
                 className={`w-full border border-black bg-transparent resize-none px-4 py-3 focus:outline-none focus:ring-0 transition-all duration-1000 ease-in-out ${
-                  screenShape === 'classic' ? 'h-24' : 'h-28'
+                  screenShape === 'classic' ? 'h-28' : 'h-28'
                 }`}
                 placeholder=""
               ></textarea>
