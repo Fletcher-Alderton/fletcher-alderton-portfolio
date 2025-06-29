@@ -498,7 +498,7 @@ export default function Home() {
       </header>
 
       {/* About Section */}
-      <section id="info" className={`relative z-10 px-4 sm:px-6 lg:px-8 flex items-center md:-ml-[50px] transition-all duration-1000 ease-in-out ${
+      <section id="info" className={`relative z-10 px-4 sm:px-6 lg:px-8 flex items-center md:-ml-50 transition-all duration-1000 ease-in-out ${
         screenShape === 'phone' ? 'min-h-[45vh] max-h-[60vh]' :
         screenShape === 'square' ? 'min-h-[55vh] max-h-[65vh]' :
         screenShape === 'classic' ? 'min-h-[59vh] max-h-[69vh]' :
