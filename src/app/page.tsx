@@ -369,25 +369,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* DEBUG: Aspect-ratio category indicator */}
-      {mounted && (
-      <div className="fixed bottom-4 right-4 z-50 bg-black text-white p-2 text-sm">
-        {screenShape === 'phone' && <span>📱 PHONE (≤3:4)</span>}
-        {screenShape === 'square' && <span>🟫 SQUARE (3:4-4:3)</span>}
-        {screenShape === 'classic' && <span>💻 CLASSIC (4:3-3:2)</span>}
-        {screenShape === 'mac' && <span>🍎 MAC (3:2-1.58)</span>}
-        {screenShape === 'wide_short' && <span>🖥️ WIDE_SHORT (1.58-1.7)</span>}
-        {screenShape === 'wide' && <span>🖥️ WIDE (1.7-21:9)</span>}
-        {screenShape === 'ultrawide' && <span>🖥️ ULTRAWIDE (&gt;21:9)</span>}
-        <br />
-        <span>Selected: {selectedIndex}</span>
-        <br />
-        <span>Details: {centerProjectShowingDetails ? 'YES' : 'NO'}</span>
-        <br />
-        <span>Cursor: {cursorIcon || 'none'}</span>
-      </div>
-      )}
-
       {/* Decorative Background Circles */}
       {/* Animated Background Circles - single set that moves based on screen shape */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
