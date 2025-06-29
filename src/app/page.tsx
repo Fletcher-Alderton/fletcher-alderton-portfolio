@@ -111,10 +111,30 @@ export default function Home() {
   const [api, setApi] = useState<CarouselApi>();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isHoveringInteractive, setIsHoveringInteractive] = useState(false);
-  const [cursorIcon, setCursorIcon] = useState<'plus' | 'minus' | 'arrow-left' | 'arrow-right' | null>(null);
+  const [cursorIcon, setCursorIcon] = useState<'plus' | 'minus' | 'arrow-left' | 'arrow-right' | 'arrow-up' | null>(null);
   const [centerProjectShowingDetails, setCenterProjectShowingDetails] = useState(false);
   const prevIndexRef = React.useRef(0);
   const [hoveredProjectIndex, setHoveredProjectIndex] = useState<number | null>(null);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [note, setNote] = useState('');
+  const [isNameValid, setIsNameValid] = useState(false);
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [isNoteValid, setIsNoteValid] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const handleSubmit = () => {
+    console.log('Form submitted:', { name, email, note });
+    // Here you would typically send the data to a server
+    // For now, we just reset the form and show confirmation
+    setName('');
+    setEmail('');
+    setNote('');
+    setShowConfirmation(true);
+    setTimeout(() => {
+      setShowConfirmation(false);
+    }, 2000); // Hide after 2 seconds
+  };
 
   // Debug effect to track centerProjectShowingDetails changes
   useEffect(() => {
@@ -126,9 +146,49 @@ export default function Home() {
     console.log(`[${Date.now()}] cursorIcon changed to:`, cursorIcon);
   }, [cursorIcon]);
 
-  // Update cursor icon whenever hover index, selected index or detail state changes
+  // Form validation effect
   useEffect(() => {
-    if (hoveredProjectIndex === null) return;
+    const validateEmail = (email: string) => {
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(String(email).toLowerCase());
+    };
+    setIsNameValid(name.trim() !== '');
+    setIsEmailValid(validateEmail(email));
+    setIsNoteValid(note.trim() !== '');
+  }, [name, email, note]);
+
+  const isFormValid = isNameValid && isEmailValid && isNoteValid;
+  const formCompletionCount = (isNameValid ? 1 : 0) + (isEmailValid ? 1 : 0) + (isNoteValid ? 1 : 0);
+
+  // Global click listener for form submission
+  useEffect(() => {
+    const handleGlobalClick = (e: MouseEvent) => {
+      if (isFormValid) {
+        // Stop links from navigating and other default click actions
+        e.preventDefault();
+        e.stopPropagation();
+        handleSubmit();
+      }
+    };
+
+    // Using capture phase to intercept clicks early
+    window.addEventListener('click', handleGlobalClick, true);
+    return () => {
+      window.removeEventListener('click', handleGlobalClick, true);
+    };
+  }, [isFormValid, name, email, note]); // Ensure handleSubmit has fresh state
+
+  // Update cursor icon reactively
+  useEffect(() => {
+    if (isFormValid) {
+      setCursorIcon('arrow-up');
+      return; // Form submission is the highest priority cursor
+    }
+
+    if (hoveredProjectIndex === null) {
+      setCursorIcon(null); // No project card is hovered
+      return;
+    }
 
     if (hoveredProjectIndex === selectedIndex) {
       setCursorIcon(centerProjectShowingDetails ? 'minus' : 'plus');
@@ -138,17 +198,22 @@ export default function Home() {
       const distLeft  = (selectedIndex - hoveredProjectIndex + num) % num;
       setCursorIcon(distLeft < distRight ? 'arrow-left' : 'arrow-right');
     }
-  }, [hoveredProjectIndex, selectedIndex, centerProjectShowingDetails]);
+  }, [isFormValid, hoveredProjectIndex, selectedIndex, centerProjectShowingDetails]);
 
-  const handleMouseEnter = () => setIsHoveringInteractive(true);
+  const handleMouseEnter = () => {
+    console.log(`[${Date.now()}] handleMouseEnter. formCompletionCount: ${formCompletionCount}`);
+    if(formCompletionCount > 0) return;
+    setIsHoveringInteractive(true);
+  }
   const handleMouseLeave = () => {
-    setIsHoveringInteractive(false);
-    setCursorIcon(null);
+    console.log(`[${Date.now()}] handleMouseLeave. formCompletionCount: ${formCompletionCount}`);
     setHoveredProjectIndex(null);
+    setIsHoveringInteractive(false);
   };
 
   const handleProjectCardHover = (index: number) => {
-    setIsHoveringInteractive(true);
+    console.log(`[${Date.now()}] handleProjectCardHover. formCompletionCount: ${formCompletionCount}, index: ${index}`);
+    if(formCompletionCount === 0) setIsHoveringInteractive(true);
     setHoveredProjectIndex(index);
   };
 
@@ -225,30 +290,59 @@ export default function Home() {
     };
   }, [api]);
 
+  let cursorBgClass = 'bg-gray-300/30 border-gray-300/50';
+  if (formCompletionCount === 1) cursorBgClass = 'bg-orange-500/20 border-orange-400/30';
+  if (formCompletionCount === 2) cursorBgClass = 'bg-orange-500/50 border-orange-400/60';
+  if (formCompletionCount === 3) cursorBgClass = 'bg-orange-500 border-orange-400';
+
+  const shouldShrink = isHoveringInteractive && !cursorIcon && formCompletionCount === 0;
+
   return (
     <div className="relative min-h-screen bg-neutral-50 overflow-hidden" style={{ cursor: 'none' }}>
       {/* Custom Cursor */}
       {mounted && (
         <div
-          className={`fixed top-0 left-0 bg-gray-100/30 backdrop-blur-md rounded-full pointer-events-none z-[9999] transition-all duration-100 border border-gray-100/50 ease-out shadow-lg flex items-center justify-center ${
-            isHoveringInteractive && !cursorIcon ? 'w-4 h-4' : 'w-10 h-10'
-          }`}
+          className="fixed top-0 left-0 pointer-events-none z-[9999]"
           style={{
-            transform: `translate(${mousePosition.x - (isHoveringInteractive && !cursorIcon ? 8 : 20)}px, ${mousePosition.y - (isHoveringInteractive && !cursorIcon ? 8 : 20)}px)`
+            transform: `translate(${mousePosition.x}px, ${mousePosition.y}px)`,
           }}
         >
-          {cursorIcon === 'plus' && <span className="text-white text-3xl font-thin">+</span>}
-          {cursorIcon === 'minus' && <span className="text-white text-3xl font-thin">−</span>}
-          {cursorIcon === 'arrow-left' && (
-            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          )}
-          {cursorIcon === 'arrow-right' && (
-            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          )}
+          {/* The actual cursor circle */}
+          <div
+            className={`transition-all duration-100 border ease-out shadow-lg flex items-center justify-center rounded-full backdrop-blur-md ${
+              shouldShrink ? 'w-4 h-4' : 'w-10 h-10'
+            } ${cursorBgClass}`}
+            style={{
+              transform: `translate(-50%, -50%)`,
+            }}
+          >
+            {cursorIcon === 'plus' && <span className="text-white text-3xl font-thin leading-none">+</span>}
+            {cursorIcon === 'minus' && <span className="text-white text-3xl font-thin leading-none">−</span>}
+            {cursorIcon === 'arrow-left' && (
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            )}
+            {cursorIcon === 'arrow-right' && (
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            )}
+            {cursorIcon === 'arrow-up' && (
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+              </svg>
+            )}
+          </div>
+          {/* "Click to send" text */}
+          <div
+            className={`text-black font-serif transition-opacity mt-0 duration-300 whitespace-nowrap ${isFormValid || showConfirmation ? 'opacity-100' : 'opacity-0'}`}
+            style={{
+              transform: `translate(-50%, -10px)`,
+            }}
+          >
+            {showConfirmation ? 'Sent!' : 'click to send'}
+          </div>
         </div>
       )}
 
@@ -482,9 +576,14 @@ export default function Home() {
           <form className="relative">
             {/* Your Name Input - nearly center but slightly to the left */}
             <div className="absolute left-1/2 transform -translate-x-1/2 translate-x-[-80px] w-80">
-              <label className={`block font-serif text-black mb-4 transition-all duration-1000 ease-in-out ${
-                screenShape === 'classic' ? 'text-2xl md:text-3xl' : 'text-2xl md:text-3xl'
-              }`}>Your Name</label>
+              <label 
+                className={`block font-serif text-black mb-4 transition-all duration-1000 ease-in-out ${
+                  screenShape === 'classic' ? 'text-2xl md:text-3xl' : 'text-2xl md:text-3xl'
+                }`}
+                style={{ cursor: 'none' }}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              >Your Name</label>
               <input 
                 type="text" 
                 className={`w-full border border-black bg-transparent px-4 focus:outline-none focus:ring-0 transition-all duration-1000 ease-in-out ${
@@ -493,6 +592,8 @@ export default function Home() {
                 style={{ cursor: 'none' }}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
             
@@ -502,9 +603,14 @@ export default function Home() {
               screenShape === 'classic' ? 'translate-x-[-300px]' :
               'translate-x-[120px]'
             }`}>
-              <label className={`block font-serif text-black mb-4 transition-all duration-1000 ease-in-out ${
-                screenShape === 'classic' ? 'text-2xl md:text-3xl' : 'text-2xl md:text-3xl'
-              }`}>Email</label>
+              <label 
+                className={`block font-serif text-black mb-4 transition-all duration-1000 ease-in-out ${
+                  screenShape === 'classic' ? 'text-2xl md:text-3xl' : 'text-2xl md:text-3xl'
+                }`}
+                style={{ cursor: 'none' }}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              >Email</label>
               <input 
                 type="email" 
                 className={`w-full border border-black bg-transparent px-4 focus:outline-none focus:ring-0 transition-all duration-1000 ease-in-out ${
@@ -513,6 +619,8 @@ export default function Home() {
                 style={{ cursor: 'none' }}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             
@@ -520,9 +628,14 @@ export default function Home() {
             <div className={`absolute top-96 left-1/2 transform -translate-x-1/2 transition-all duration-1000 ease-in-out ${
               screenShape === 'classic' ? 'translate-x-[-200px] w-[400px]' : 'translate-x-[-200px] w-[500px]'
             }`}>
-              <label className={`block font-serif text-black mb-4 transition-all duration-1000 ease-in-out ${
-                screenShape === 'classic' ? 'text-2xl md:text-3xl' : 'text-2xl md:text-3xl'
-              }`}>A little Note</label>
+              <label 
+                className={`block font-serif text-black mb-4 transition-all duration-1000 ease-in-out ${
+                  screenShape === 'classic' ? 'text-2xl md:text-3xl' : 'text-2xl md:text-3xl'
+                }`}
+                style={{ cursor: 'none' }}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              >A little Note</label>
               <textarea 
                 className={`w-full border border-black bg-transparent resize-none px-4 py-3 focus:outline-none focus:ring-0 transition-all duration-1000 ease-in-out ${
                   screenShape === 'classic' ? 'h-28' : 'h-28'
@@ -531,6 +644,8 @@ export default function Home() {
                 style={{ cursor: 'none' }}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
               ></textarea>
             </div>
             
