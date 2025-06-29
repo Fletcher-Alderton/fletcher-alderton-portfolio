@@ -2,11 +2,155 @@
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import BlurEffect from "react-progressive-blur";
+import ProjectCard from "./components/ProjectCard";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
+} from "@/components/ui/carousel";
+import React from "react";
+
+const projects = [
+  {
+    imageSrc: "/floating-notes.png",
+    imageAlt: "Floating Notes App",
+    title: "Floating Notes",
+    description: "A simple note taking app",
+    detailedDescription: "Floating notes was made in SwiftUI as an alternative to raycast notes but free and open source, you can read about troubled development here or check it out on GitHub",
+    links: [
+      { text: "SwiftUI", url: "#", type: "swift" },
+      { text: "here", url: "#", type: "blog" },
+      { text: "GitHub", url: "#", type: "github" }
+    ]
+  },
+  {
+    imageSrc: "/qtm.png",
+    imageAlt: "Quotes that Matter App",
+    title: "Quotes that Matter",
+    description: "Giving great quotes the attention they deserve",
+    detailedDescription: "Quotes that Matter is a React application designed to showcase meaningful quotes in an elegant interface. Built with modern web technologies, you can learn more about the development process here or view the source code on GitHub",
+    links: [
+      { text: "here", url: "#", type: "blog" },
+      { text: "GitHub", url: "#", type: "github" }
+    ]
+  },
+  {
+    imageSrc: "/just-save-it.png",
+    imageAlt: "Just $ave It App",
+    title: "Just $ave It",
+    description: "See what you could be worth if you just saved it",
+    detailedDescription: "Just $ave It helps you visualize the power of saving money over time with compound interest calculations. This web application demonstrates financial growth scenarios, read about the development here or explore the code on GitHub",
+    links: [
+      { text: "here", url: "#", type: "blog" },
+      { text: "GitHub", url: "#", type: "github" }
+    ]
+  },
+  {
+    imageSrc: "/weather-app.png",
+    imageAlt: "Weather Dashboard",
+    title: "Weather Dashboard",
+    description: "Real-time weather tracking with beautiful visualizations",
+    detailedDescription: "A modern weather application built with React and TypeScript, featuring real-time data visualization, location-based forecasts, and responsive design. Learn more about the development process here or view the source on GitHub",
+    links: [
+      { text: "React", url: "#", type: "react" },
+      { text: "TypeScript", url: "#", type: "typescript" },
+      { text: "here", url: "#", type: "blog" },
+      { text: "GitHub", url: "#", type: "github" }
+    ]
+  },
+  {
+    imageSrc: "/task-manager.png",
+    imageAlt: "Task Management System",
+    title: "TaskFlow Pro",
+    description: "Full-stack task management with team collaboration",
+    detailedDescription: "A comprehensive task management system built with Next.js and a robust database backend. Features team collaboration, real-time updates, and advanced project tracking. This fullstack application showcases modern web development practices, read about it here or check the code on GitHub",
+    links: [
+      { text: "Next.js", url: "#", type: "nextjs" },
+      { text: "database", url: "#", type: "database" },
+      { text: "fullstack", url: "#", type: "fullstack" },
+      { text: "here", url: "#", type: "blog" },
+      { text: "GitHub", url: "#", type: "github" }
+    ]
+  },
+  {
+    imageSrc: "/desktop-app.png",
+    imageAlt: "Desktop Productivity App",
+    title: "Focus Timer",
+    description: "Cross-platform productivity app for desktop",
+    detailedDescription: "A powerful desktop application built with Electron and React, featuring customizable pomodoro timers, productivity tracking, and system notifications. Available for Windows, macOS, and Linux. Learn about the development journey here or explore the source on GitHub",
+    links: [
+      { text: "Electron", url: "#", type: "electron" },
+      { text: "React", url: "#", type: "react" },
+      { text: "here", url: "#", type: "blog" },
+      { text: "GitHub", url: "#", type: "github" }
+    ]
+  },
+  {
+    imageSrc: "/mobile-app.png",
+    imageAlt: "Mobile Fitness Tracker",
+    title: "FitTrack Mobile",
+    description: "Cross-platform fitness tracking app",
+    detailedDescription: "A comprehensive fitness tracking application built with React Native, featuring workout logging, progress visualization, and social features. Available for both iOS and Android platforms. The app integrates with wearable devices and provides detailed analytics. Read about the development process here or view the code on GitHub",
+    links: [
+      { text: "React", url: "#", type: "react" },
+      { text: "iOS", url: "#", type: "ios" },
+      { text: "Android", url: "#", type: "android" },
+      { text: "here", url: "#", type: "blog" },
+      { text: "GitHub", url: "#", type: "github" }
+    ]
+  }
+] as const;
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [screenShape, setScreenShape] = useState<'phone' | 'square' | 'classic' | 'mac' | 'wide_short' | 'wide' | 'ultrawide' | 'unknown'>('wide'); // Default to wide for SSR
   const [mounted, setMounted] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [api, setApi] = useState<CarouselApi>();
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [isHoveringInteractive, setIsHoveringInteractive] = useState(false);
+  const [cursorIcon, setCursorIcon] = useState<'plus' | 'minus' | 'arrow-left' | 'arrow-right' | null>(null);
+  const [centerProjectShowingDetails, setCenterProjectShowingDetails] = useState(false);
+  const prevIndexRef = React.useRef(0);
+  const [hoveredProjectIndex, setHoveredProjectIndex] = useState<number | null>(null);
+
+  // Debug effect to track centerProjectShowingDetails changes
+  useEffect(() => {
+    console.log(`[${Date.now()}] centerProjectShowingDetails changed to:`, centerProjectShowingDetails);
+  }, [centerProjectShowingDetails]);
+
+  // Debug effect to track cursorIcon changes
+  useEffect(() => {
+    console.log(`[${Date.now()}] cursorIcon changed to:`, cursorIcon);
+  }, [cursorIcon]);
+
+  // Update cursor icon whenever hover index, selected index or detail state changes
+  useEffect(() => {
+    if (hoveredProjectIndex === null) return;
+
+    if (hoveredProjectIndex === selectedIndex) {
+      setCursorIcon(centerProjectShowingDetails ? 'minus' : 'plus');
+    } else {
+      const num = projects.length;
+      const distRight = (hoveredProjectIndex - selectedIndex + num) % num;
+      const distLeft  = (selectedIndex - hoveredProjectIndex + num) % num;
+      setCursorIcon(distLeft < distRight ? 'arrow-left' : 'arrow-right');
+    }
+  }, [hoveredProjectIndex, selectedIndex, centerProjectShowingDetails]);
+
+  const handleMouseEnter = () => setIsHoveringInteractive(true);
+  const handleMouseLeave = () => {
+    setIsHoveringInteractive(false);
+    setCursorIcon(null);
+    setHoveredProjectIndex(null);
+  };
+
+  const handleProjectCardHover = (index: number) => {
+    setIsHoveringInteractive(true);
+    setHoveredProjectIndex(index);
+  };
 
   const updateScreenShape = () => {
     if (typeof window === 'undefined') return;
@@ -30,15 +174,84 @@ export default function Home() {
     }
   };
 
+  const handleMouseMove = (e: MouseEvent) => {
+    setMousePosition({ x: e.clientX, y: e.clientY });
+  };
+
   useEffect(() => {
     setMounted(true);
     updateScreenShape();
     window.addEventListener('resize', updateScreenShape);
-    return () => window.removeEventListener('resize', updateScreenShape);
+    window.addEventListener('mousemove', handleMouseMove);
+    
+    return () => {
+      window.removeEventListener('resize', updateScreenShape);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
   }, []);
 
+  useEffect(() => {
+    if (!api) {
+      console.log(`[${Date.now()}] Carousel API not ready yet`);
+      return;
+    }
+
+    console.log(`[${Date.now()}] Carousel API is ready, setting up listeners`);
+    
+    const handleSelect = () => {
+      const newIndex = api.selectedScrollSnap();
+      const prevIndex = prevIndexRef.current;
+      console.log(`[${Date.now()}] Carousel select event:`, { prevIndex, newIndex });
+      
+      if (newIndex !== prevIndex) {
+        console.log(`[${Date.now()}] Slide changed from ${prevIndex} to ${newIndex} - resetting details`);
+        setCenterProjectShowingDetails(false);
+        prevIndexRef.current = newIndex;
+      } else {
+        console.log(`[${Date.now()}] Slide did not change (index ${newIndex}) - keeping details state`);
+      }
+      
+      setSelectedIndex(newIndex);
+    };
+
+    // Initialize ref with current index
+    prevIndexRef.current = api.selectedScrollSnap();
+
+    api.on("select", handleSelect);
+    handleSelect(); 
+
+    return () => {
+      api.off("select", handleSelect);
+    };
+  }, [api]);
+
   return (
-    <div className="relative min-h-screen bg-neutral-50 overflow-hidden">
+    <div className="relative min-h-screen bg-neutral-50 overflow-hidden" style={{ cursor: 'none' }}>
+      {/* Custom Cursor */}
+      {mounted && (
+        <div
+          className={`fixed top-0 left-0 bg-gray-100/30 backdrop-blur-md rounded-full pointer-events-none z-[9999] transition-all duration-100 border border-gray-100/50 ease-out shadow-lg flex items-center justify-center ${
+            isHoveringInteractive && !cursorIcon ? 'w-4 h-4' : 'w-10 h-10'
+          }`}
+          style={{
+            transform: `translate(${mousePosition.x - (isHoveringInteractive && !cursorIcon ? 8 : 20)}px, ${mousePosition.y - (isHoveringInteractive && !cursorIcon ? 8 : 20)}px)`
+          }}
+        >
+          {cursorIcon === 'plus' && <span className="text-white text-3xl font-thin">+</span>}
+          {cursorIcon === 'minus' && <span className="text-white text-3xl font-thin">−</span>}
+          {cursorIcon === 'arrow-left' && (
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          )}
+          {cursorIcon === 'arrow-right' && (
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          )}
+        </div>
+      )}
+
       {/* DEBUG: Aspect-ratio category indicator */}
       {mounted && (
       <div className="fixed bottom-4 right-4 z-50 bg-black text-white p-2 text-sm">
@@ -49,6 +262,12 @@ export default function Home() {
         {screenShape === 'wide_short' && <span>🖥️ WIDE_SHORT (1.58-1.7)</span>}
         {screenShape === 'wide' && <span>🖥️ WIDE (1.7-21:9)</span>}
         {screenShape === 'ultrawide' && <span>🖥️ ULTRAWIDE (&gt;21:9)</span>}
+        <br />
+        <span>Selected: {selectedIndex}</span>
+        <br />
+        <span>Details: {centerProjectShowingDetails ? 'YES' : 'NO'}</span>
+        <br />
+        <span>Cursor: {cursorIcon || 'none'}</span>
       </div>
       )}
 
@@ -59,12 +278,12 @@ export default function Home() {
         <div 
           className={`absolute bg-[#FF5900] rounded-full transition-all duration-1000 ease-in-out ${
             screenShape === 'phone' ? '-left-[225px] -top-[225px] w-[600px] h-[600px]' :
-            screenShape === 'square' ? '-left-[375px] -top-[375px] w-[1000px] h-[1000px]' :
-            screenShape === 'classic' ? '-left-[338px] -top-[338px] w-[1000px] h-[1000px]' :
-            screenShape === 'mac' ? '-left-[300px] -top-[300px] w-[800px] h-[800px]' :
-            screenShape === 'wide_short' ? '-left-[338px] -top-[338px] w-[900px] h-[900px]' :
-            screenShape === 'wide' ? '-left-[338px] -top-[338px] w-[900px] h-[900px]' :
-            '-left-[250px] -top-[445px] w-[1200px] h-[1200px]' // ultrawide
+            screenShape === 'square' ? '-left-[19.53vw] -top-[26.04vh] w-[52.08vw] h-[52.08vw]' :
+            screenShape === 'classic' ? '-left-[17.60vw] -top-[26.41vh] w-[52.08vw] h-[52.08vw]' :
+            screenShape === 'mac' ? '-left-[19.84vw] -top-[30.55vh] w-[52.91vw] h-[52.91vw]' :
+            screenShape === 'wide_short' ? '-left-[17.60vw] -top-[28.17vh] w-[46.88vw] h-[46.88vw]' :
+            screenShape === 'wide' ? '-left-[17.60vw] -top-[31.30vh] w-[46.88vw] h-[46.88vw]' :
+            '-left-[9.92vw] -top-[41.20vh] w-[47.62vw] h-[47.62vw]' // ultrawide
           }`}
         ></div>
         
@@ -72,12 +291,12 @@ export default function Home() {
         <div 
           className={`absolute bg-[#008CFF] rounded-full transition-all duration-1000 ease-in-out ${
             screenShape === 'phone' ? 'right-[-200px] top-[400px] w-[500px] h-[500px]' :
-            screenShape === 'square' ? 'right-[-250px] top-[600px] w-[800px] h-[800px]' :
-            screenShape === 'classic' ? 'right-[-300px] top-[700px] w-[750px] h-[750px]' :
-            screenShape === 'mac' ? 'right-[-325px] top-[600px] w-[650px] h-[650px]' :
-            screenShape === 'wide_short' ? 'right-[-300px] top-[700px] w-[750px] h-[750px]' :
-            screenShape === 'wide' ? 'right-[-300px] top-[700px] w-[750px] h-[750px]' :
-            'right-[-350px] top-[650px] w-[850px] h-[850px]' // ultrawide
+            screenShape === 'square' ? 'right-[-13.02vw] top-[41.67vh] w-[41.67vw] h-[41.67vw]' :
+            screenShape === 'classic' ? 'right-[-15.63vw] top-[54.69vh] w-[39.06vw] h-[39.06vw]' :
+            screenShape === 'mac' ? 'right-[-21.49vw] top-[61.10vh] w-[43.00vw] h-[43.00vw]' :
+            screenShape === 'wide_short' ? 'right-[-15.63vw] top-[58.33vh] w-[39.06vw] h-[39.06vw]' :
+            screenShape === 'wide' ? 'right-[-15.63vw] top-[64.81vh] w-[39.06vw] h-[39.06vw]' :
+            'right-[-13.89vw] top-[60.19vh] w-[33.73vw] h-[33.73vw]' // ultrawide
           }`}
         ></div>
         
@@ -85,12 +304,12 @@ export default function Home() {
         <div 
           className={`absolute bg-[#B2FF00] rounded-full transition-all duration-1000 ease-in-out ${
             screenShape === 'phone' ? '-left-[200px] top-[1400px] w-[600px] h-[600px]' :
-            screenShape === 'square' ? '-left-[325px] top-[1800px] w-[1000px] h-[1000px]' :
-            screenShape === 'classic' ? '-left-[325px] top-[1350px] w-[1000px] h-[1000px]' :
-            screenShape === 'mac' ? '-left-[266px] top-[1300px] w-[800px] h-[800px]' :
-            screenShape === 'wide_short' ? '-left-[325px] top-[1700px] w-[1000px] h-[1000px]' :
-            screenShape === 'wide' ? '-left-[325px] top-[1350px] w-[1000px] h-[1000px]' :
-            '-left-[325px] top-[1500px] w-[1000px] h-[1000px]' // ultrawide
+            screenShape === 'square' ? '-left-[16.93vw] top-[125.00vh] w-[52.08vw] h-[52.08vw]' :
+            screenShape === 'classic' ? '-left-[16.93vw] top-[105.47vh] w-[52.08vw] h-[52.08vw]' :
+            screenShape === 'mac' ? '-left-[17.59vw] top-[132.38vh] w-[52.91vw] h-[52.91vw]' :
+            screenShape === 'wide_short' ? '-left-[16.93vw] top-[141.67vh] w-[52.08vw] h-[52.08vw]' :
+            screenShape === 'wide' ? '-left-[16.93vw] top-[125.00vh] w-[52.08vw] h-[52.08vw]' :
+            '-left-[12.90vw] top-[138.89vh] w-[39.68vw] h-[39.68vw]' // ultrawide
           }`}
         ></div>
         
@@ -98,12 +317,12 @@ export default function Home() {
         <div 
           className={`absolute bg-[#008CFF] rounded-full transition-all duration-1000 ease-in-out ${
             screenShape === 'phone' ? 'left-[-200px] bottom-[-200px] w-[500px] h-[500px]' :
-            screenShape === 'square' ? 'left-[-250px] bottom-[-250px] w-[700px] h-[700px]' :
-            screenShape === 'classic' ? 'left-[-250px] bottom-[-250px] w-[700px] h-[700px]' :
-            screenShape === 'mac' ? 'left-[-250px] bottom-[-250px] w-[650px] h-[650px]' :
-            screenShape === 'wide_short' ? 'left-[-250px] bottom-[-250px] w-[700px] h-[700px]' :
-            screenShape === 'wide' ? 'left-[-250px] bottom-[-250px] w-[700px] h-[700px]' :
-            'left-[-300px] bottom-[-300px] w-[800px] h-[800px]' // ultrawide
+            screenShape === 'square' ? 'left-[-13.02vw] bottom-[-17.36vh] w-[36.46vw] h-[36.46vw]' :
+            screenShape === 'classic' ? 'left-[-13.02vw] bottom-[-19.53vh] w-[36.46vw] h-[36.46vw]' :
+            screenShape === 'mac' ? 'left-[-16.53vw] bottom-[-25.46vh] w-[43.00vw] h-[43.00vw]' :
+            screenShape === 'wide_short' ? 'left-[-13.02vw] bottom-[-20.83vh] w-[36.46vw] h-[36.46vw]' :
+            screenShape === 'wide' ? 'left-[-13.02vw] bottom-[-23.15vh] w-[36.46vw] h-[36.46vw]' :
+            'left-[-11.90vw] bottom-[-27.78vh] w-[31.75vw] h-[31.75vw]' // ultrawide
           }`}
         ></div>
         
@@ -111,12 +330,12 @@ export default function Home() {
         <div 
           className={`absolute bg-[#FF5900] rounded-full transition-all duration-1000 ease-in-out ${
             screenShape === 'phone' ? 'right-[-300px] bottom-[0px] w-[600px] h-[600px]' :
-            screenShape === 'square' ? 'right-[-400px] bottom-[0px] w-[800px] h-[800px]' :
-            screenShape === 'classic' ? 'right-[-450px] bottom-[0px] w-[1000px] h-[1000px]' :
-            screenShape === 'mac' ? 'right-[-325px] bottom-[0px] w-[650px] h-[650px]' :
-            screenShape === 'wide_short' ? 'right-[-450px] bottom-[0px] w-[738px] h-[738px]' :
-            screenShape === 'wide' ? 'right-[-450px] bottom-[0px] w-[738px] h-[738px]' :
-            'right-[-480px] bottom-[0px] w-[850px] h-[850px]' // ultrawide
+            screenShape === 'square' ? 'right-[-20.83vw] bottom-[0vh] w-[41.67vw] h-[41.67vw]' :
+            screenShape === 'classic' ? 'right-[-23.44vw] bottom-[0vh] w-[52.08vw] h-[52.08vw]' :
+            screenShape === 'mac' ? 'right-[-21.49vw] bottom-[0vh] w-[43.00vw] h-[43.00vw]' :
+            screenShape === 'wide_short' ? 'right-[-23.44vw] bottom-[0vh] w-[38.44vw] h-[38.44vw]' :
+            screenShape === 'wide' ? 'right-[-23.44vw] bottom-[0vh] w-[38.44vw] h-[38.44vw]' :
+            'right-[-19.05vw] bottom-[0vh] w-[33.73vw] h-[33.73vw]' // ultrawide
           }`}
         ></div>
       </div>
@@ -130,6 +349,9 @@ export default function Home() {
           <button 
             className="md:hidden text-black p-2"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            style={{ cursor: 'none' }}
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
@@ -138,9 +360,9 @@ export default function Home() {
 
           {/* Desktop navigation */}
           <div className="hidden md:flex space-x-6 lg:space-x-12">
-            <a href="#info" className="text-xl lg:text-3xl font-serif text-black hover:opacity-70 transition-opacity">Info</a>
-            <a href="#projects" className="text-xl lg:text-3xl font-serif text-black hover:opacity-70 transition-opacity">Projects</a>
-            <a href="#contact" className="text-xl lg:text-3xl font-serif text-black hover:opacity-70 transition-opacity">Contact</a>
+            <a href="#info" className="text-xl lg:text-3xl font-serif text-black hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Info</a>
+            <a href="#projects" className="text-xl lg:text-3xl font-serif text-black hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Projects</a>
+            <a href="#contact" className="text-xl lg:text-3xl font-serif text-black hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Contact</a>
           </div>
         </nav>
 
@@ -148,9 +370,9 @@ export default function Home() {
         {isMenuOpen && (
           <div className="md:hidden absolute top-full left-0 right-0 bg-neutral-50 border-t border-black z-20">
             <div className="px-4 py-4 space-y-4">
-              <a href="#info" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity" onClick={() => setIsMenuOpen(false)}>Info</a>
-              <a href="#projects" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity" onClick={() => setIsMenuOpen(false)}>Projects</a>
-              <a href="#contact" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity" onClick={() => setIsMenuOpen(false)}>Contact</a>
+              <a href="#info" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Info</a>
+              <a href="#projects" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Projects</a>
+              <a href="#contact" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Contact</a>
             </div>
           </div>
         )}
@@ -160,26 +382,26 @@ export default function Home() {
 
       {/* About Section */}
       <section id="info" className={`relative z-10 px-4 sm:px-6 lg:px-8 flex items-center transition-all duration-1000 ease-in-out ${
-        screenShape === 'phone' ? 'min-h-[calc(50vh-4vh)]' :
-        screenShape === 'square' ? 'min-h-[calc(63vh-1vh)]' :
-        screenShape === 'classic' ? 'min-h-[calc(65vh-1vh)]' :
-        screenShape === 'mac' ? 'min-h-[calc(65vh-5vh)]' :
-        screenShape === 'wide_short' ? 'min-h-[calc(70vh-5vh)]' :
-        screenShape === 'wide' ? 'min-h-[calc(70vh-5vh)]' :
-        'min-h-[calc(100vh-25vh)]' // ultrawide
+        screenShape === 'phone' ? 'min-h-[45vh] max-h-[60vh]' :
+        screenShape === 'square' ? 'min-h-[55vh] max-h-[65vh]' :
+        screenShape === 'classic' ? 'min-h-[59vh] max-h-[69vh]' :
+        screenShape === 'mac' ? 'min-h-[55vh] max-h-[65vh]' :
+        screenShape === 'wide_short' ? 'min-h-[65vh] max-h-[75vh]' :
+        screenShape === 'wide' ? 'min-h-[65vh] max-h-[75vh]' :
+        'min-h-[77vh] max-h-[87vh]' // ultrawide
       }`}>
         <div className="max-w-7xl mx-auto w-full">
           <div className={`flex transition-all duration-1000 ease-in-out ${
-            screenShape === 'classic' ? 'justify-end' : 'justify-center md:justify-end'
+            screenShape === 'classic' ? 'justify-center md:justify-end' : 'justify-center md:justify-end'
           }`}>
             <div className={`transition-all duration-1000 ease-in-out ${
-              screenShape === 'classic' ? 'max-w-lg mr-18' : 'max-w-2xl md:mr-8 lg:mr-16'
+              screenShape === 'classic' ? 'max-w-xl md:mr-24' : 'max-w-2xl md:mr-8 lg:mr-16'
             }`}>
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-serif italic text-black mb-3 md:mb-4">About me!</h2>
               <div className="w-32 sm:w-40 md:w-48 h-px bg-black mb-6 md:mb-8"></div>
               <p className={`font-serif text-black leading-relaxed transition-all duration-1000 ease-in-out ${
                 screenShape === 'ultrawide' ? 'text-3xl' :
-                screenShape === 'classic' ? 'text-2xl' :
+                screenShape === 'classic' ? 'text-xl' :
                 screenShape === 'wide' ? 'text-2xl' :
                 screenShape === 'wide_short' ? 'text-xl' :
                 'text-lg sm:text-xl md:text-2xl lg:text-xl '
@@ -200,60 +422,48 @@ export default function Home() {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="relative z-10 px-2 sm:px-4 md:px-6 lg:px-8 min-h-screen flex items-center">
-        <div className="max-w-none mx-auto w-full">
+      <section id="projects" className="relative z-10 min-h-screen flex flex-col justify-center py-16 md:py-24">
+        <div className="max-w-7xl mx-auto w-full px-2 sm:px-4 md:px-6 lg:px-8">
           <h2 className={`font-serif italic text-black mb-3 md:mb-4 transition-all duration-1000 ease-in-out ${
             screenShape === 'classic' ? 'text-3xl sm:text-4xl md:text-5xl' : 'text-3xl sm:text-4xl md:text-5xl'
           }`}>My Projects</h2>
           <div className="w-40 sm:w-44 md:w-52 h-px bg-black mb-8 md:mb-12 lg:mb-16"></div>
-          
-          <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-6 lg:gap-8">
-            {/* Project Card 1 - Task Management Interface */}
-            <div className="relative group">
-              <div className="bg-gray-200 aspect-square relative overflow-hidden shadow-lg">
-                <Image src="/floating-notes.png" alt="Task Management Interface" width={1000} height={1000} className="w-full h-full object-cover" />
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 backdrop-blur-sm p-4 md:p-6">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-lg sm:text-xl md:text-2xl font-serif text-black mb-1 md:mb-2">Floating Notes</h3>
-                    <p className="text-sm sm:text-base md:text-lg font-serif text-black">A simple note taking app</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Project Card 2 - Quotes Display System */}
-            <div className="relative group">
-              <div className="bg-gray-200 aspect-square relative overflow-hidden shadow-lg">
-                <Image src="/qtm.png" alt="Task Management Interface" width={1000} height={1000} className="w-full h-full object-cover" />
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 backdrop-blur-sm p-4 md:p-6">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-lg sm:text-xl md:text-2xl font-serif text-black mb-1 md:mb-2">Quotes that Matter</h3>
-                    <p className="text-sm sm:text-base md:text-lg font-serif text-black">Giving great quotes the attention they deserve</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Project Card 3 - Just Save It */}
-            <div className="relative group">
-              <div className="bg-gray-200 aspect-square relative overflow-hidden shadow-lg">
-                <Image src="/just-save-it.png" alt="Task Management Interface" width={1000} height={1000} className="w-full h-full object-cover" />
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 backdrop-blur-sm p-4 md:p-6">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-lg sm:text-xl md:text-2xl font-serif text-black mb-1 md:mb-2">Just $ave It</h3>
-                    <p className="text-sm sm:text-base md:text-lg font-serif text-black">See what you could be worth if you just saved it</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
+        <Carousel
+          setApi={setApi}
+          opts={{
+            align: "center",
+            loop: true,
+          }}
+          className="w-full"
+        >
+          <CarouselContent className="-ml-2 md:-ml-4">
+            {projects.map((project, index) => (
+              <CarouselItem key={index} className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
+                <ProjectCard
+                  {...project}
+                  isCentered={index === selectedIndex}
+                  onCenterClick={() => {
+                    console.log('onCenterClick called:', { index, selectedIndex, isCenter: index === selectedIndex });
+                    if (index === selectedIndex) {
+                      console.log('Clicking on center project - should toggle details');
+                    } else {
+                      console.log('Clicking on non-center project - scrolling to:', index);
+                      api?.scrollTo(index);
+                    }
+                  }}
+                  onMouseEnter={() => handleProjectCardHover(index)}
+                  onMouseLeave={handleMouseLeave}
+                  onShowDetailsChange={(showingDetails) => {
+                    if(index !== selectedIndex) return; // ignore non-centered cards
+                    console.log(`[${Date.now()}] onShowDetailsChange (center card) called:`, {index, selectedIndex, showingDetails});
+                    setCenterProjectShowingDetails(showingDetails);
+                  }}
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
       </section>
 
       {/* Contact Section */}
@@ -280,6 +490,9 @@ export default function Home() {
                 className={`w-full border border-black bg-transparent px-4 focus:outline-none focus:ring-0 transition-all duration-1000 ease-in-out ${
                   screenShape === 'classic' ? 'h-14' : 'h-14'
                 }`}
+                style={{ cursor: 'none' }}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
               />
             </div>
             
@@ -297,6 +510,9 @@ export default function Home() {
                 className={`w-full border border-black bg-transparent px-4 focus:outline-none focus:ring-0 transition-all duration-1000 ease-in-out ${
                   screenShape === 'classic' ? 'h-14' : 'h-14'
                 }`}
+                style={{ cursor: 'none' }}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
               />
             </div>
             
@@ -312,6 +528,9 @@ export default function Home() {
                   screenShape === 'classic' ? 'h-28' : 'h-28'
                 }`}
                 placeholder=""
+                style={{ cursor: 'none' }}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
               ></textarea>
             </div>
             
