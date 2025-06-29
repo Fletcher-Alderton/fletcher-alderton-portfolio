@@ -123,17 +123,33 @@ export default function Home() {
   const [isNoteValid, setIsNoteValid] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
-  const handleSubmit = () => {
-    console.log('Form submitted:', { name, email, note });
-    // Here you would typically send the data to a server
-    // For now, we just reset the form and show confirmation
-    setName('');
-    setEmail('');
-    setNote('');
-    setShowConfirmation(true);
-    setTimeout(() => {
-      setShowConfirmation(false);
-    }, 2000); // Hide after 2 seconds
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch('/api/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email, note }),
+      });
+
+      if (response.ok) {
+        console.log('Email sent successfully');
+        setName('');
+        setEmail('');
+        setNote('');
+        setShowConfirmation(true);
+        setTimeout(() => {
+          setShowConfirmation(false);
+        }, 2000); // Hide after 2 seconds
+      } else {
+        console.error('Failed to send email');
+        // Optionally, show an error message to the user
+      }
+    } catch (error) {
+      console.error('An error occurred while sending the email:', error);
+      // Optionally, show an error message to the user
+    }
   };
 
   // Debug effect to track centerProjectShowingDetails changes
@@ -162,12 +178,12 @@ export default function Home() {
 
   // Global click listener for form submission
   useEffect(() => {
-    const handleGlobalClick = (e: MouseEvent) => {
+    const handleGlobalClick = async (e: MouseEvent) => {
       if (isFormValid) {
         // Stop links from navigating and other default click actions
         e.preventDefault();
         e.stopPropagation();
-        handleSubmit();
+        await handleSubmit();
       }
     };
 
