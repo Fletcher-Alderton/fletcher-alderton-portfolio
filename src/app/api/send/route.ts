@@ -11,9 +11,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const { data, error } = await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: 'Portfolio Contact <onboarding@resend.dev>', // This must be a verified domain on Resend.
-      to: ['myportfolio.h6m9q@simplelogin.com'], // CHANGE THIS to your email address.
+      to: ['resend.xp2eo@simplelogin.com'], // CHANGE THIS to your email address.
       subject: `New message from ${name} on your portfolio!`,
       html: `<p>You received a new message from your portfolio contact form.</p>
              <p><strong>Name:</strong> ${name}</p>

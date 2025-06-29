@@ -1,8 +1,6 @@
 "use client";
 
-import Image from "next/image";
 import { useState, useEffect } from "react";
-import BlurEffect from "react-progressive-blur";
 import ProjectCard from "./components/ProjectCard";
 import {
   Carousel,
@@ -122,6 +120,7 @@ export default function Home() {
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isNoteValid, setIsNoteValid] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [hasFinePointer, setHasFinePointer] = useState(true);
 
   const handleSubmit = async () => {
     try {
@@ -176,8 +175,16 @@ export default function Home() {
   const isFormValid = isNameValid && isEmailValid && isNoteValid;
   const formCompletionCount = (isNameValid ? 1 : 0) + (isEmailValid ? 1 : 0) + (isNoteValid ? 1 : 0);
 
-  // Global click listener for form submission
+  // Detect whether the current device has a precise pointer (mouse/track-pad)
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    setHasFinePointer(window.matchMedia('(pointer:fine)').matches);
+  }, []);
+
+  // Global click listener for form submission (mouse devices only)
+  useEffect(() => {
+    if (typeof window === 'undefined' || !hasFinePointer) return;
+
     const handleGlobalClick = async (e: MouseEvent) => {
       if (isFormValid) {
         // Stop links from navigating and other default click actions
@@ -192,7 +199,7 @@ export default function Home() {
     return () => {
       window.removeEventListener('click', handleGlobalClick, true);
     };
-  }, [isFormValid, name, email, note]); // Ensure handleSubmit has fresh state
+  }, [isFormValid, name, email, note, hasFinePointer]); // Ensure handleSubmit has fresh state
 
   // Update cursor icon reactively
   useEffect(() => {
@@ -314,9 +321,9 @@ export default function Home() {
   const shouldShrink = isHoveringInteractive && !cursorIcon && formCompletionCount === 0;
 
   return (
-    <div className="relative min-h-screen bg-neutral-50 overflow-x-hidden overflow-y-auto" style={{ cursor: 'none' }}>
+    <div className="relative min-h-screen bg-neutral-50 overflow-x-hidden overflow-y-auto" style={hasFinePointer ? { cursor: 'none' } : undefined}>
       {/* Custom Cursor */}
-      {mounted && (
+      {mounted && hasFinePointer && (
         <div
           className="fixed top-0 left-0 pointer-events-none z-[9999]"
           style={{
@@ -491,7 +498,7 @@ export default function Home() {
       </header>
 
       {/* About Section */}
-      <section id="info" className={`relative z-10 px-4 sm:px-6 lg:px-8 flex items-center -ml-50 transition-all duration-1000 ease-in-out ${
+      <section id="info" className={`relative z-10 px-4 sm:px-6 lg:px-8 flex items-center md:-ml-[50px] transition-all duration-1000 ease-in-out ${
         screenShape === 'phone' ? 'min-h-[45vh] max-h-[60vh]' :
         screenShape === 'square' ? 'min-h-[55vh] max-h-[65vh]' :
         screenShape === 'classic' ? 'min-h-[59vh] max-h-[69vh]' :
@@ -591,7 +598,7 @@ export default function Home() {
           
           <form className="relative">
             {/* Your Name Input - nearly center but slightly to the left */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 translate-x-[-80px] w-80">
+            <div className="w-full md:absolute md:left-1/2 md:transform md:-translate-x-1/2 md:translate-x-[-80px] md:w-80 mb-12">
               <label 
                 className={`block font-serif text-black mb-4 transition-all duration-1000 ease-in-out ${
                   screenShape === 'classic' ? 'text-2xl md:text-3xl' : 'text-2xl md:text-3xl'
@@ -614,10 +621,10 @@ export default function Home() {
             </div>
             
             {/* Email Input - off-centered to the right */}
-            <div className={`absolute top-48 left-1/2 transform -translate-x-1/2 w-96 ${
-              screenShape === 'mac' ? 'translate-x-[70px]' :
-              screenShape === 'classic' ? 'translate-x-[-300px]' :
-              'translate-x-[120px]'
+            <div className={`w-full mb-12 md:absolute md:top-48 md:left-1/2 md:transform md:-translate-x-1/2 md:w-96 ${
+              screenShape === 'mac' ? 'md:translate-x-[70px]' :
+              screenShape === 'classic' ? 'md:translate-x-[-300px]' :
+              'md:translate-x-[120px]'
             }`}>
               <label 
                 className={`block font-serif text-black mb-4 transition-all duration-1000 ease-in-out ${
@@ -641,8 +648,8 @@ export default function Home() {
             </div>
             
             {/* A little Note - off-center to the left, further than Your Name */}
-            <div className={`absolute top-96 left-1/2 transform -translate-x-1/2 transition-all duration-1000 ease-in-out ${
-              screenShape === 'classic' ? 'translate-x-[-200px] w-[400px]' : 'translate-x-[-200px] w-[500px]'
+            <div className={`w-full md:absolute md:top-96 md:left-1/2 md:transform md:-translate-x-1/2 transition-all duration-1000 ease-in-out ${
+              screenShape === 'classic' ? 'md:translate-x-[-200px] md:w-[400px]' : 'md:translate-x-[-200px] md:w-[500px]'
             }`}>
               <label 
                 className={`block font-serif text-black mb-4 transition-all duration-1000 ease-in-out ${
