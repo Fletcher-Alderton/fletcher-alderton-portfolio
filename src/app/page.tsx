@@ -314,7 +314,7 @@ export default function Home() {
   const shouldShrink = isHoveringInteractive && !cursorIcon && formCompletionCount === 0;
 
   return (
-    <div className="relative min-h-screen bg-neutral-50 overflow-hidden" style={{ cursor: 'none' }}>
+    <div className="relative min-h-screen bg-neutral-50 overflow-x-hidden overflow-y-auto" style={{ cursor: 'none' }}>
       {/* Custom Cursor */}
       {mounted && (
         <div
@@ -383,7 +383,7 @@ export default function Home() {
 
       {/* Decorative Background Circles */}
       {/* Animated Background Circles - single set that moves based on screen shape */}
-      <div>
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Circle 1 - Top Left Orange */}
         <div 
           className={`absolute bg-[#FF5900] rounded-full transition-all duration-1000 ease-in-out ${
@@ -415,7 +415,7 @@ export default function Home() {
           className={`absolute bg-[#B2FF00] rounded-full transition-all duration-1000 ease-in-out ${
             screenShape === 'phone' ? '-left-[200px] top-[1400px] w-[600px] h-[600px]' :
             screenShape === 'square' ? '-left-[16.93vw] top-[125.00vh] w-[52.08vw] h-[52.08vw]' :
-            screenShape === 'classic' ? '-left-[16.93vw] top-[105.47vh] w-[52.08vw] h-[52.08vw]' :
+            screenShape === 'classic' ? '-left-[16.93vw] top-[125.47vh] w-[52.08vw] h-[52.08vw]' :
             screenShape === 'mac' ? '-left-[17.59vw] top-[132.38vh] w-[52.91vw] h-[52.91vw]' :
             screenShape === 'wide_short' ? '-left-[16.93vw] top-[141.67vh] w-[52.08vw] h-[52.08vw]' :
             screenShape === 'wide' ? '-left-[16.93vw] top-[125.00vh] w-[52.08vw] h-[52.08vw]' :
@@ -491,7 +491,7 @@ export default function Home() {
       </header>
 
       {/* About Section */}
-      <section id="info" className={`relative z-10 px-4 sm:px-6 lg:px-8 flex items-center transition-all duration-1000 ease-in-out ${
+      <section id="info" className={`relative z-10 px-4 sm:px-6 lg:px-8 flex items-center -ml-50 transition-all duration-1000 ease-in-out ${
         screenShape === 'phone' ? 'min-h-[45vh] max-h-[60vh]' :
         screenShape === 'square' ? 'min-h-[55vh] max-h-[65vh]' :
         screenShape === 'classic' ? 'min-h-[59vh] max-h-[69vh]' :
@@ -533,7 +533,7 @@ export default function Home() {
 
       {/* Projects Section */}
       <section id="projects" className="relative z-10 min-h-screen flex flex-col justify-center py-16 md:py-24">
-        <div className="max-w-7xl mx-auto w-full px-2 sm:px-4 md:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto w-full px-2 ml-5 sm:px-4 md:px-6 lg:px-8">
           <h2 className={`font-serif italic text-black mb-3 md:mb-4 transition-all duration-1000 ease-in-out ${
             screenShape === 'classic' ? 'text-3xl sm:text-4xl md:text-5xl' : 'text-3xl sm:text-4xl md:text-5xl'
           }`}>My Projects</h2>
