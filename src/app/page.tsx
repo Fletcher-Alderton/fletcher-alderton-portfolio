@@ -339,20 +339,20 @@ export default function Home() {
               transform: `translate(-50%, -50%)`,
             }}
           >
-            {cursorIcon === 'plus' && <span className="text-white text-3xl font-thin leading-none">+</span>}
-            {cursorIcon === 'minus' && <span className="text-white text-3xl font-thin leading-none">−</span>}
+            {cursorIcon === 'plus' && <span className="text-[#9fe202] text-3xl font-thin leading-none">+</span>}
+            {cursorIcon === 'minus' && <span className="text-[#FF5900] text-3xl font-thin leading-none">−</span>}
             {cursorIcon === 'arrow-left' && (
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-[#008CFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             )}
             {cursorIcon === 'arrow-right' && (
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-[#008CFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             )}
             {cursorIcon === 'arrow-up' && (
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-[#008CFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
               </svg>
             )}
@@ -375,7 +375,7 @@ export default function Home() {
         {/* Circle 1 - Top Left Orange */}
         <div 
           className={`absolute bg-[#FF5900] rounded-full transition-all duration-1000 ease-in-out ${
-            screenShape === 'phone' ? '-left-[225px] -top-[225px] w-[600px] h-[600px]' :
+            screenShape === 'phone' ? '-left-[60vw] -top-[20vh] w-[120vw] h-[120vw]' :
             screenShape === 'square' ? '-left-[19.53vw] -top-[26.04vh] w-[52.08vw] h-[52.08vw]' :
             screenShape === 'classic' ? '-left-[17.60vw] -top-[26.41vh] w-[52.08vw] h-[52.08vw]' :
             screenShape === 'mac' ? '-left-[19.84vw] -top-[30.55vh] w-[52.91vw] h-[52.91vw]' :
@@ -388,7 +388,7 @@ export default function Home() {
         {/* Circle 2 - Right Blue */}
         <div 
           className={`absolute bg-[#008CFF] rounded-full transition-all duration-1000 ease-in-out ${
-            screenShape === 'phone' ? 'right-[-200px] top-[400px] w-[500px] h-[500px]' :
+            screenShape === 'phone' ? 'right-[-50vw] top-[80vh] w-[110vw] h-[110vw]' :
             screenShape === 'square' ? 'right-[-13.02vw] top-[41.67vh] w-[41.67vw] h-[41.67vw]' :
             screenShape === 'classic' ? 'right-[-15.63vw] top-[54.69vh] w-[39.06vw] h-[39.06vw]' :
             screenShape === 'mac' ? 'right-[-21.49vw] top-[61.10vh] w-[43.00vw] h-[43.00vw]' :
@@ -401,7 +401,7 @@ export default function Home() {
         {/* Circle 3 - Bottom Left Green */}
         <div 
           className={`absolute bg-[#B2FF00] rounded-full transition-all duration-1000 ease-in-out ${
-            screenShape === 'phone' ? '-left-[200px] top-[1400px] w-[600px] h-[600px]' :
+            screenShape === 'phone' ? '-left-[50vw] top-[160vh] w-[120vw] h-[120vw]' :
             screenShape === 'square' ? '-left-[16.93vw] top-[125.00vh] w-[52.08vw] h-[52.08vw]' :
             screenShape === 'classic' ? '-left-[16.93vw] top-[125.47vh] w-[52.08vw] h-[52.08vw]' :
             screenShape === 'mac' ? '-left-[17.59vw] top-[132.38vh] w-[52.91vw] h-[52.91vw]' :
@@ -414,7 +414,7 @@ export default function Home() {
         {/* Circle 4 - Bottom Left Blue */}
         <div 
           className={`absolute bg-[#008CFF] rounded-full transition-all duration-1000 ease-in-out ${
-            screenShape === 'phone' ? 'left-[-200px] bottom-[-200px] w-[500px] h-[500px]' :
+            screenShape === 'phone' ? 'left-[-30vw] bottom-[-15vh] w-[100vw] h-[100vw]' :
             screenShape === 'square' ? 'left-[-13.02vw] bottom-[-17.36vh] w-[36.46vw] h-[36.46vw]' :
             screenShape === 'classic' ? 'left-[-13.02vw] bottom-[-19.53vh] w-[36.46vw] h-[36.46vw]' :
             screenShape === 'mac' ? 'left-[-16.53vw] bottom-[-25.46vh] w-[43.00vw] h-[43.00vw]' :
@@ -427,7 +427,7 @@ export default function Home() {
         {/* Circle 5 - Bottom Right Orange */}
         <div 
           className={`absolute bg-[#FF5900] rounded-full transition-all duration-1000 ease-in-out ${
-            screenShape === 'phone' ? 'right-[-300px] bottom-[0px] w-[600px] h-[600px]' :
+            screenShape === 'phone' ? 'right-[-40vw] bottom-[-5vh] w-[120vw] h-[120vw]' :
             screenShape === 'square' ? 'right-[-20.83vw] bottom-[0vh] w-[41.67vw] h-[41.67vw]' :
             screenShape === 'classic' ? 'right-[-23.44vw] bottom-[0vh] w-[52.08vw] h-[52.08vw]' :
             screenShape === 'mac' ? 'right-[-21.49vw] bottom-[0vh] w-[43.00vw] h-[43.00vw]' :
@@ -439,9 +439,9 @@ export default function Home() {
       </div>
 
       {/* Header */}
-      <header className="relative z-10 px-4 sm:px-6 lg:px-8 py-4 md:py-6">
+      <header className={`relative z-30 px-4 sm:px-6 lg:px-8 py-4 md:py-6 ${isMenuOpen ? 'bg-neutral-50' : ''}`}>
         <nav className="flex justify-between items-center max-w-7xl mx-auto">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-serif text-black">Fletcher Alderton</h1>
+          <h1 className="text-3xl sm:text-2xl md:text-3xl font-serif text-black">Fletcher Alderton</h1>
           
           {/* Mobile menu button */}
           <button 
@@ -466,16 +466,16 @@ export default function Home() {
 
         {/* Mobile navigation menu */}
         {isMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-neutral-50 border-t border-black z-20">
-            <div className="px-4 py-4 space-y-4">
-              <a href="#info" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Info</a>
-              <a href="#projects" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Projects</a>
-              <a href="#contact" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Contact</a>
+          <div className="md:hidden absolute top-full left-0 right-0 bg-neutral-50 z-50">
+            <div className="px-4 divide-y divide-black border-t border-black mx-4">
+              <a href="#info" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity py-4" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Info</a>
+              <a href="#projects" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity py-4" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Projects</a>
+              <a href="#contact" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity py-4" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Contact</a>
             </div>
           </div>
         )}
 
-        <div className="w-full h-px bg-black mt-4 md:mt-6 max-w-7xl mx-auto"></div>
+        <div className={`w-full h-px bg-black mt-4 md:mt-6 max-w-7xl mx-auto ${isMenuOpen ? 'hidden' : 'block'}`}></div>
       </header>
 
       {/* About Section */}
@@ -533,7 +533,7 @@ export default function Home() {
             align: "center",
             loop: true,
           }}
-          className="w-full"
+          className="w-full px-2.5 md:px-0"
         >
           <CarouselContent className="-ml-2 md:-ml-4">
             {projects.map((project, index) => (
@@ -562,6 +562,28 @@ export default function Home() {
             ))}
           </CarouselContent>
         </Carousel>
+        
+        {/* Position Indicators - Mobile Only */}
+        <div className="flex justify-center mt-6 md:hidden">
+          <div className="flex gap-1">
+            {projects.map((_, index) => (
+              <span
+                key={index}
+                className={`inline-block rounded-full transition-all duration-200 ${
+                  index === selectedIndex ? 'bg-black' : 'bg-gray-400'
+                }`}
+                style={{ 
+                  width: '10px', 
+                  height: '10px',
+                  cursor: 'none'
+                }}
+                onClick={() => api?.scrollTo(index)}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              />
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* Contact Section */}
@@ -653,8 +675,22 @@ export default function Home() {
               ></textarea>
             </div>
             
+            {/* Mobile-only Submit Button */}
+            <div className="flex justify-center mt-6 md:hidden">
+              <button
+                type="button"
+                onClick={handleSubmit}
+                disabled={!isFormValid}
+                className={`font-serif text-lg px-6 py-2 transition-colors duration-200 ${
+                  isFormValid ? 'bg-orange-500 hover:bg-orange-600 text-white' : 'backdrop-blur-md border border-black text-black cursor-not-allowed'
+                }`}
+              >
+                Send
+              </button>
+            </div>
+            
             {/* Spacer to ensure proper section height */}
-            <div className="h-[600px]"></div>
+            <div className="h-[200px] md:h-[600px]"></div>
           </form>
         </div>
       </section>
