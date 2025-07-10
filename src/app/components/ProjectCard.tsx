@@ -103,7 +103,7 @@ export default function ProjectCard({ imageSrc, imageAlt, title, description, de
           
           {/* Content Overlay */}
           <div className="relative z-20 max-w-[85%] text-center">
-            <p className="text-sm sm:text-base md:text-lg lg:text-xl font-noto-serif text-white leading-relaxed tracking-wide font-normal">
+            <p className="text-lg lg:text-xl font-noto-serif text-white leading-relaxed tracking-wide font-normal">
               {detailedDescription.split(new RegExp(`(${links.map(l => l.text.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')).join('|')})`, 'i')).map((part, index) => {
                 const matchingLink = links.find(link => link.text.toLowerCase() === part.toLowerCase());
                 
@@ -154,8 +154,8 @@ export default function ProjectCard({ imageSrc, imageAlt, title, description, de
         <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 z-20">
           <div className="flex justify-between items-start">
             <div>
-              <h3 className="text-lg sm:text-xl md:text-2xl font-serif text-black mb-1 md:mb-2">{title}</h3>
-              <p className="text-sm sm:text-base md:text-lg font-serif text-black">{description}</p>
+              <h3 className="text-2xl font-serif text-black mb-1 md:mb-2">{title}</h3>
+              <p className="text-lg font-serif text-black">{description}</p>
             </div>
           </div>
         </div>

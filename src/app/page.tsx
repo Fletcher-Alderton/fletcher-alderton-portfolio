@@ -46,55 +46,12 @@ const projects = [
     ]
   },
   {
-    imageSrc: "/weather-app.png",
-    imageAlt: "Weather Dashboard",
-    title: "Weather Dashboard",
-    description: "Real-time weather tracking with beautiful visualizations",
-    detailedDescription: "A modern weather application built with React and TypeScript, featuring real-time data visualization, location-based forecasts, and responsive design. Learn more about the development process here or view the source on GitHub",
+    imageSrc: "/spellcheck.webp",
+    imageAlt: "Spellcheck App",
+    title: "Spellcheck",
+    description: "A simple spellcheck app",
+    detailedDescription: "Spellcheck is a simple spellcheck app that uses the OpenAI API to check the spelling of a word. This application demonstrates the use of the OpenAI API, read about the development here or explore the code on GitHub",
     links: [
-      { text: "React", url: "#", type: "react" },
-      { text: "TypeScript", url: "#", type: "typescript" },
-      { text: "here", url: "#", type: "blog" },
-      { text: "GitHub", url: "#", type: "github" }
-    ]
-  },
-  {
-    imageSrc: "/task-manager.png",
-    imageAlt: "Task Management System",
-    title: "TaskFlow Pro",
-    description: "Full-stack task management with team collaboration",
-    detailedDescription: "A comprehensive task management system built with Next.js and a robust database backend. Features team collaboration, real-time updates, and advanced project tracking. This fullstack application showcases modern web development practices, read about it here or check the code on GitHub",
-    links: [
-      { text: "Next.js", url: "#", type: "nextjs" },
-      { text: "database", url: "#", type: "database" },
-      { text: "fullstack", url: "#", type: "fullstack" },
-      { text: "here", url: "#", type: "blog" },
-      { text: "GitHub", url: "#", type: "github" }
-    ]
-  },
-  {
-    imageSrc: "/desktop-app.png",
-    imageAlt: "Desktop Productivity App",
-    title: "Focus Timer",
-    description: "Cross-platform productivity app for desktop",
-    detailedDescription: "A powerful desktop application built with Electron and React, featuring customizable pomodoro timers, productivity tracking, and system notifications. Available for Windows, macOS, and Linux. Learn about the development journey here or explore the source on GitHub",
-    links: [
-      { text: "Electron", url: "#", type: "electron" },
-      { text: "React", url: "#", type: "react" },
-      { text: "here", url: "#", type: "blog" },
-      { text: "GitHub", url: "#", type: "github" }
-    ]
-  },
-  {
-    imageSrc: "/mobile-app.png",
-    imageAlt: "Mobile Fitness Tracker",
-    title: "FitTrack Mobile",
-    description: "Cross-platform fitness tracking app",
-    detailedDescription: "A comprehensive fitness tracking application built with React Native, featuring workout logging, progress visualization, and social features. Available for both iOS and Android platforms. The app integrates with wearable devices and provides detailed analytics. Read about the development process here or view the code on GitHub",
-    links: [
-      { text: "React", url: "#", type: "react" },
-      { text: "iOS", url: "#", type: "ios" },
-      { text: "Android", url: "#", type: "android" },
       { text: "here", url: "#", type: "blog" },
       { text: "GitHub", url: "#", type: "github" }
     ]
@@ -375,7 +332,7 @@ export default function Home() {
         {/* Circle 1 - Top Left Orange */}
         <div 
           className={`absolute bg-[#FF5900] rounded-full transition-all duration-1000 ease-in-out ${
-            screenShape === 'phone' ? '-left-[60vw] -top-[20vh] w-[120vw] h-[120vw]' :
+            screenShape === 'phone' ? '-left-[40vw] -top-[43vh] w-[120vw] h-[120vw]' :
             screenShape === 'square' ? '-left-[19.53vw] -top-[26.04vh] w-[52.08vw] h-[52.08vw]' :
             screenShape === 'classic' ? '-left-[17.60vw] -top-[26.41vh] w-[52.08vw] h-[52.08vw]' :
             screenShape === 'mac' ? '-left-[19.84vw] -top-[30.55vh] w-[52.91vw] h-[52.91vw]' :
@@ -388,7 +345,7 @@ export default function Home() {
         {/* Circle 2 - Right Blue */}
         <div 
           className={`absolute bg-[#008CFF] rounded-full transition-all duration-1000 ease-in-out ${
-            screenShape === 'phone' ? 'right-[-50vw] top-[80vh] w-[110vw] h-[110vw]' :
+            screenShape === 'phone' ? 'right-[-50vw] top-[60vh] w-[110vw] h-[110vw]' :
             screenShape === 'square' ? 'right-[-13.02vw] top-[41.67vh] w-[41.67vw] h-[41.67vw]' :
             screenShape === 'classic' ? 'right-[-15.63vw] top-[54.69vh] w-[39.06vw] h-[39.06vw]' :
             screenShape === 'mac' ? 'right-[-21.49vw] top-[61.10vh] w-[43.00vw] h-[43.00vw]' :
@@ -401,7 +358,7 @@ export default function Home() {
         {/* Circle 3 - Bottom Left Green */}
         <div 
           className={`absolute bg-[#B2FF00] rounded-full transition-all duration-1000 ease-in-out ${
-            screenShape === 'phone' ? '-left-[50vw] top-[160vh] w-[120vw] h-[120vw]' :
+            screenShape === 'phone' ? '-left-[50vw] top-[130vh] w-[120vw] h-[120vw]' :
             screenShape === 'square' ? '-left-[16.93vw] top-[125.00vh] w-[52.08vw] h-[52.08vw]' :
             screenShape === 'classic' ? '-left-[16.93vw] top-[125.47vh] w-[52.08vw] h-[52.08vw]' :
             screenShape === 'mac' ? '-left-[17.59vw] top-[132.38vh] w-[52.91vw] h-[52.91vw]' :
@@ -504,15 +461,12 @@ export default function Home() {
                 screenShape === 'wide_short' ? 'text-xl' :
                 'text-lg sm:text-xl md:text-2xl lg:text-xl '
               }`}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla 
-                eget justo nec sapien malesuada placerat. Phasellus id est tortor, 
-                ac rhoncus lectus. Donec in nulla at tellus elementum 
-                ullamcorper. Sed a arcu a elit interdum eleifend. Integer sit amet 
-                mauris eu nisi auctor euismod. In hac habitasse platea dictumst. 
-                Nulla non purus sed augue ullamcorper sodales eu vel nisi. 
-                Aenean faucibus, arcu et interdum fringilla, nulla libero 
-                rhoncus diam, sed faucibus augue justo ac lacus. Vivamus at 
-                libero non nibh aliquam tincidunt non sed quam.
+                Hi, I’m Fletcher, a full stack developer from Melbourne. <br></br>I love building anything that piques my curiosity, from over engenired apps to something simple that makes life a little easier. 
+                Ive been obsesed with tech for the last 10 years and I dont see that ending anytime soon. 
+                I’m currently interning at Westpac while finishing my uni degree.
+                When I’m not coding, you’ll find me enjoying Melbourne’s coffee or wine with friends.
+                You can read my dev struggles on my <a href="https://mostlytech.xyz" target="_blank" rel="noopener noreferrer" className="text-black font-bold hover:text-orange-500">blog </a>
+                or check out my <a href="https://github.com/Fletcher-Alderton" target="_blank" rel="noopener noreferrer" className="text-black font-bold hover:text-orange-500">GitHub</a> for the code.
               </p>
             </div>
           </div>
