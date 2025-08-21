@@ -1,20 +1,30 @@
 import Image from "next/image";
 import BlurEffect from "react-progressive-blur";
 import { useState, useEffect } from "react";
+import { 
+  Swift, 
+  ReactLight,
+  TypeScript,
+  Nextjs,
+  Electron,
+  Android,
+  Convex,
+  VercelLight,
+  OpenAILight
+} from "@ridemountainpig/svgl-react";
 
-interface ProjectLink {
-  text: string;
+interface ExternalLink {
+  type: string;
   url: string;
-  type: 'swift' | 'blog' | 'github' | 'react' | 'typescript' | 'nextjs' | 'database' | 'fullstack' | 'electron' | 'ios' | 'android';
 }
-
 interface ProjectCardProps {
   imageSrc: string;
   imageAlt: string;
   title: string;
   description: string;
   detailedDescription: string;
-  links: readonly ProjectLink[];
+  links: readonly ExternalLink[];
+  techStack: { [key: string]: boolean };
   isCentered: boolean;
   onCenterClick: () => void;
   onMouseEnter: () => void;
@@ -22,7 +32,7 @@ interface ProjectCardProps {
   onShowDetailsChange: (showingDetails: boolean) => void;
 }
 
-export default function ProjectCard({ imageSrc, imageAlt, title, description, detailedDescription, links, isCentered, onCenterClick, onMouseEnter, onMouseLeave, onShowDetailsChange }: ProjectCardProps) {
+export default function ProjectCard({ imageSrc, imageAlt, title, description, detailedDescription, links, techStack, isCentered, onCenterClick, onMouseEnter, onMouseLeave, onShowDetailsChange }: ProjectCardProps) {
   const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
@@ -47,28 +57,32 @@ export default function ProjectCard({ imageSrc, imageAlt, title, description, de
     }
   };
 
-  const getLinkColor = (type: ProjectLink['type']) => {
+  const TechIcon = ({ type }: { type: string }) => {
+    const size = 28;
+    const commonProps = { width: size, height: size } as const;
     switch (type) {
       case 'swift':
-      case 'electron':
-        return 'text-orange-300 hover:text-orange-200';
+        return <Swift {...commonProps} />;
       case 'react':
-      case 'nextjs':
-        return 'text-blue-300 hover:text-blue-200';
+        return <ReactLight {...commonProps} />;
       case 'typescript':
-        return 'text-cyan-300 hover:text-cyan-200';
-      case 'database':
-        return 'text-green-300 hover:text-green-200';
-      case 'github':
-        return 'text-gray-300 hover:text-gray-200';
-      case 'ios':
-        return 'text-purple-300 hover:text-purple-200';
+        return <TypeScript {...commonProps} />;
+      case 'nextjs':
+        return <Nextjs {...commonProps} />;
+      case 'electron':
+        return <Electron {...commonProps} />;
       case 'android':
-        return 'text-lime-300 hover:text-lime-200';
+        return <Android {...commonProps} />;
+      case 'convex':
+        return <Convex {...commonProps} />;
+      case 'vercel':
+        return <VercelLight {...commonProps} />;
+      case 'openai':
+        return <OpenAILight {...commonProps} />;
       default:
-        return 'text-indigo-300 hover:text-indigo-200'; // for blog, fullstack etc.
+        return null;
     }
-  }
+  };
 
   if (showDetails) {
     return (
@@ -78,7 +92,7 @@ export default function ProjectCard({ imageSrc, imageAlt, title, description, de
         onMouseLeave={onMouseLeave}
       >
         <div 
-          className="aspect-square relative overflow-hidden shadow-lg cursor-pointer flex items-center justify-center"
+          className="aspect-square relative overflow-hidden shadow-lg cursor-pointer"
           onClick={handleClick}
           style={{ cursor: 'none' }}
         >
@@ -90,40 +104,58 @@ export default function ProjectCard({ imageSrc, imageAlt, title, description, de
             height={1000} 
             className="absolute inset-0 w-full h-full object-cover"
           />
-          
-          {/* Progressive Blur Effect */}
-          <BlurEffect 
-            position="bottom" 
-            intensity={200}
-            className="h-full"
-          />
-          
-          {/* Dark Overlay for Better Contrast */}
-          <div className="absolute inset-0 bg-black/40 z-10"></div>
-          
-          {/* Content Overlay */}
-          <div className="relative z-20 max-w-[85%] text-center">
-            <p className="text-lg lg:text-xl font-noto-serif text-white leading-relaxed tracking-wide font-normal">
-              {detailedDescription.split(new RegExp(`(${links.map(l => l.text.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')).join('|')})`, 'i')).map((part, index) => {
-                const matchingLink = links.find(link => link.text.toLowerCase() === part.toLowerCase());
-                
-                if (matchingLink) {
-                  return (
-                    <a 
-                      key={index}
-                      href={matchingLink.url}
-                      className={`font-medium ${getLinkColor(matchingLink.type)} underline decoration-2 underline-offset-2 transition-colors`}
+
+          {/* Subtle base tint to reduce noise behind details */}
+          <div className="absolute inset-0 bg-white/40" />
+
+          {/* Full-card Details Panel - Minimal brutalist */}
+          <div className="absolute inset-0 z-20 bg-neutral-50 border border-black p-5 md:p-6 flex flex-col">
+            {/* Title + top-right links */}
+            <div className="flex items-start justify-between gap-4">
+              <h3 className="text-2xl md:text-3xl font-serif text-black italic">{title}</h3>
+              <div className="flex items-center gap-4">
+                {links
+                  .filter(l => /^(github|blog)$/i.test(l.type.trim()))
+                  .map((link, idx) => (
+                    <a
+                      key={idx}
+                      href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
+                      className="font-serif text-black underline underline-offset-4 hover:opacity-70"
+                      onClick={(e) => e.stopPropagation()}
                       style={{ cursor: 'none' }}
                     >
-                      {part}
+                      {link.type.charAt(0).toUpperCase() + link.type.slice(1)}
                     </a>
-                  );
-                }
-                return part;
-              })}
+                ))}
+              </div>
+            </div>
+
+            <div className="h-px bg-black my-3"></div>
+
+            {/* Description */}
+            <p className="text-base md:text-lg font-serif text-black leading-relaxed max-w-prose">
+              {detailedDescription}
             </p>
+
+            {/* Tech stack */}
+            {techStack && Object.keys(techStack).length > 0 && (
+              <div className="mt-auto">
+                <h4 className="font-serif text-lg font-regular text-black italic">Tech stack</h4>
+                <div className="h-px bg-black mb-3"></div>
+                <div className="flex items-center gap-3 flex-wrap">
+                  {Object.entries(techStack)
+                    .filter(([_, isPresent]) => isPresent)
+                    .map(([tech, _], idx) => (
+                    <div key={idx} className="inline-flex items-center gap-2 border border-black px-2 py-1 bg-white" title={tech}>
+                      <TechIcon type={tech} />
+                      <span className="text-sm font-serif text-black">{tech}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

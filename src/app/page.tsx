@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { SparklesText } from "@/components/magicui/sparkles-text";
 import ProjectCard from "./components/ProjectCard";
 import {
   Carousel,
@@ -9,54 +10,7 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import React from "react";
-
-const projects = [
-  {
-    imageSrc: "/floating-notes.png",
-    imageAlt: "Floating Notes App",
-    title: "Floating Notes",
-    description: "A simple note taking app",
-    detailedDescription: "Floating notes was made in SwiftUI as an alternative to raycast notes but free and open source, you can read about troubled development here or check it out on GitHub",
-    links: [
-      { text: "SwiftUI", url: "#", type: "swift" },
-      { text: "here", url: "#", type: "blog" },
-      { text: "GitHub", url: "#", type: "github" }
-    ]
-  },
-  {
-    imageSrc: "/qtm.png",
-    imageAlt: "Quotes that Matter App",
-    title: "Quotes that Matter",
-    description: "Giving great quotes the attention they deserve",
-    detailedDescription: "Quotes that Matter is a React application designed to showcase meaningful quotes in an elegant interface. Built with modern web technologies, you can learn more about the development process here or view the source code on GitHub",
-    links: [
-      { text: "here", url: "#", type: "blog" },
-      { text: "GitHub", url: "#", type: "github" }
-    ]
-  },
-  {
-    imageSrc: "/just-save-it.png",
-    imageAlt: "Just $ave It App",
-    title: "Just $ave It",
-    description: "See what you could be worth if you just saved it",
-    detailedDescription: "Just $ave It helps you visualize the power of saving money over time with compound interest calculations. This web application demonstrates financial growth scenarios, read about the development here or explore the code on GitHub",
-    links: [
-      { text: "here", url: "#", type: "blog" },
-      { text: "GitHub", url: "#", type: "github" }
-    ]
-  },
-  {
-    imageSrc: "/spellcheck.webp",
-    imageAlt: "Spellcheck App",
-    title: "Spellcheck",
-    description: "A simple spellcheck app",
-    detailedDescription: "Spellcheck is a simple spellcheck app that uses the OpenAI API to check the spelling of a word. This application demonstrates the use of the OpenAI API, read about the development here or explore the code on GitHub",
-    links: [
-      { text: "here", url: "#", type: "blog" },
-      { text: "GitHub", url: "#", type: "github" }
-    ]
-  }
-] as const;
+import projects from "../../public/projects.json";
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -70,6 +24,7 @@ export default function Home() {
   const [centerProjectShowingDetails, setCenterProjectShowingDetails] = useState(false);
   const prevIndexRef = React.useRef(0);
   const [hoveredProjectIndex, setHoveredProjectIndex] = useState<number | null>(null);
+  
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [note, setNote] = useState('');
@@ -78,6 +33,10 @@ export default function Home() {
   const [isNoteValid, setIsNoteValid] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [hasFinePointer, setHasFinePointer] = useState(true);
+  
+  // New refs for intersection observer
+  const projectCardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const carouselContainerRef = useRef<HTMLDivElement>(null);
 
   const handleSubmit = async () => {
     try {
@@ -197,6 +156,71 @@ export default function Home() {
     setHoveredProjectIndex(index);
   };
 
+  // New function to determine which project is centered using Intersection Observer
+  const determineCenteredProject = useCallback(() => {
+    if (!carouselContainerRef.current || projectCardRefs.current.length === 0) return 0;
+    
+    const containerRect = carouselContainerRef.current.getBoundingClientRect();
+    const containerCenter = containerRect.left + containerRect.width / 2;
+    
+    let closestIndex = 0;
+    let closestDistance = Infinity;
+    
+    projectCardRefs.current.forEach((cardRef, index) => {
+      if (!cardRef) return;
+      
+      const cardRect = cardRef.getBoundingClientRect();
+      const cardCenter = cardRect.left + cardRect.width / 2;
+      const distance = Math.abs(cardCenter - containerCenter);
+      
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestIndex = index;
+      }
+    });
+    
+    return closestIndex;
+  }, []);
+
+  // Set up intersection observer to track which project is centered
+  useEffect(() => {
+    if (!mounted || projectCardRefs.current.length === 0) return;
+    
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Debounce the centering calculation to avoid too many updates
+        const timeoutId = setTimeout(() => {
+          const newCenteredIndex = determineCenteredProject();
+          if (newCenteredIndex !== selectedIndex) {
+            console.log(`[${Date.now()}] Centered project changed from ${selectedIndex} to ${newCenteredIndex}`);
+            setSelectedIndex(newCenteredIndex);
+            // Reset details when centering changes
+            setCenterProjectShowingDetails(false);
+          }
+        }, 100);
+        
+        return () => clearTimeout(timeoutId);
+      },
+      {
+        root: carouselContainerRef.current,
+        rootMargin: '0px',
+        threshold: 0.5, // Trigger when 50% of the card is visible
+      }
+    );
+    
+    // Observe all project cards
+    projectCardRefs.current.forEach((cardRef) => {
+      if (cardRef) observer.observe(cardRef);
+    });
+    
+    return () => observer.disconnect();
+  }, [mounted, determineCenteredProject, selectedIndex]);
+
+  // Initialize project card refs
+  useEffect(() => {
+    projectCardRefs.current = new Array(projects.length).fill(null);
+  }, []);
+
   const updateScreenShape = () => {
     if (typeof window === 'undefined') return;
     
@@ -243,31 +267,12 @@ export default function Home() {
 
     console.log(`[${Date.now()}] Carousel API is ready, setting up listeners`);
     
-    const handleSelect = () => {
-      const newIndex = api.selectedScrollSnap();
-      const prevIndex = prevIndexRef.current;
-      console.log(`[${Date.now()}] Carousel select event:`, { prevIndex, newIndex });
-      
-      if (newIndex !== prevIndex) {
-        console.log(`[${Date.now()}] Slide changed from ${prevIndex} to ${newIndex} - resetting details`);
-        setCenterProjectShowingDetails(false);
-        prevIndexRef.current = newIndex;
-      } else {
-        console.log(`[${Date.now()}] Slide did not change (index ${newIndex}) - keeping details state`);
-      }
-      
-      setSelectedIndex(newIndex);
-    };
-
-    // Initialize ref with current index
-    prevIndexRef.current = api.selectedScrollSnap();
-
-    api.on("select", handleSelect);
-    handleSelect(); 
-
-    return () => {
-      api.off("select", handleSelect);
-    };
+    // Initialize with the first project as centered
+    setSelectedIndex(0);
+    prevIndexRef.current = 0;
+    
+    // We'll let the intersection observer handle centering from now on
+    // but keep the API for scrolling functionality
   }, [api]);
 
   let cursorBgClass = 'bg-gray-300/30 border-gray-300/50';
@@ -414,7 +419,7 @@ export default function Home() {
           </button>
 
           {/* Desktop navigation */}
-          <div className="hidden md:flex space-x-6 lg:space-x-12">
+          <div className="hidden md:flex space-x-6 lg:space-x-8">
             <a href="#info" className="text-xl lg:text-3xl font-serif text-black hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Info</a>
             <a href="#projects" className="text-xl lg:text-3xl font-serif text-black hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Projects</a>
             <a href="#contact" className="text-xl lg:text-3xl font-serif text-black hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Contact</a>
@@ -461,12 +466,14 @@ export default function Home() {
                 screenShape === 'wide_short' ? 'text-xl' :
                 'text-lg sm:text-xl md:text-2xl lg:text-xl '
               }`}>
-                Hi, I’m Fletcher, a full stack developer from Melbourne. <br></br>I love building anything that piques my curiosity, from over engenired apps to something simple that makes life a little easier. 
-                Ive been obsesed with tech for the last 10 years and I dont see that ending anytime soon. 
-                I’m currently interning at Westpac while finishing my uni degree.
-                When I’m not coding, you’ll find me enjoying Melbourne’s coffee or wine with friends.
-                You can read my dev struggles on my <a href="https://mostlytech.xyz" target="_blank" rel="noopener noreferrer" className="text-black font-bold hover:text-orange-500">blog </a>
-                or check out my <a href="https://github.com/Fletcher-Alderton" target="_blank" rel="noopener noreferrer" className="text-black font-bold hover:text-orange-500">GitHub</a> for the code.
+                Hi, I'm Fletcher, a full-stack developer based in Melbourne, Australia. I'm passionate about creating everything from complex, over-engineered apps to simple tools that make everyday life easier. With over 5 years of curiosity-driven experience in technology.
+                <br />
+                <br />
+                Right now, I'm interning at Westpac while completing my university degree, gaining hands-on experience in building scalable, real-world applications.
+                <br />
+                <br />
+                When I'm not coding, you'll probably find me exploring Melbourne's coffee scene, enjoying a glass of wine with friends, or jotting down my latest dev struggles and lessons learned here on the <a href="https://mostlytech.xyz" target="_blank" rel="noopener noreferrer" className="text-black font-bold hover:text-orange-500">blog</a>.
+                <br />
               </p>
             </div>
           </div>
@@ -476,66 +483,95 @@ export default function Home() {
       {/* Projects Section */}
       <section id="projects" className="relative z-10 min-h-screen flex flex-col justify-center py-16 md:py-24">
         <div className="max-w-7xl mx-auto w-full px-2 ml-5 sm:px-4 md:px-6 lg:px-8">
-          <h2 className={`font-serif italic text-black mb-3 md:mb-4 transition-all duration-1000 ease-in-out ${
-            screenShape === 'classic' ? 'text-3xl sm:text-4xl md:text-5xl' : 'text-3xl sm:text-4xl md:text-5xl'
-          }`}>My Projects</h2>
+          <div className="grid grid-cols-[1fr_1fr] items-center mb-3 md:mb-4">
+            <h2 className={`font-serif italic text-black transition-all duration-1000 ease-in-out ${
+              screenShape === 'classic' ? 'text-3xl sm:text-4xl md:text-5xl' : 'text-3xl sm:text-4xl md:text-5xl'
+            }`}>My Projects</h2>
+            
+            {/* Hint text with sparkles - mobile only */}
+            <div className="md:hidden text-center">
+              <SparklesText 
+                className="text-md lg:text-lg text-black font-thin whitespace-nowrap"
+                colors={{ first: "#B2FF00", second: "#FF5900" }}
+                sparklesCount={5}
+              >
+                Click on any project <br />
+                for more details
+              </SparklesText>
+            </div>
+          </div>
           <div className="w-40 sm:w-44 md:w-52 h-px bg-black mb-8 md:mb-12 lg:mb-16"></div>
         </div>
-        <Carousel
-          setApi={setApi}
-          opts={{
-            align: "center",
-            loop: true,
-          }}
-          className="w-full px-2.5 md:px-0"
-        >
-          <CarouselContent className="-ml-2 md:-ml-4">
-            {projects.map((project, index) => (
-              <CarouselItem key={index} className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
-                <ProjectCard
-                  {...project}
-                  isCentered={index === selectedIndex}
-                  onCenterClick={() => {
-                    console.log('onCenterClick called:', { index, selectedIndex, isCenter: index === selectedIndex });
-                    if (index === selectedIndex) {
-                      console.log('Clicking on center project - should toggle details');
-                    } else {
-                      console.log('Clicking on non-center project - scrolling to:', index);
-                      api?.scrollTo(index);
-                    }
-                  }}
-                  onMouseEnter={() => handleProjectCardHover(index)}
-                  onMouseLeave={handleMouseLeave}
-                  onShowDetailsChange={(showingDetails) => {
-                    if(index !== selectedIndex) return; // ignore non-centered cards
-                    console.log(`[${Date.now()}] onShowDetailsChange (center card) called:`, {index, selectedIndex, showingDetails});
-                    setCenterProjectShowingDetails(showingDetails);
-                  }}
-                />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
+        
+        {/* Carousel Container with ref for intersection observer */}
+        <div ref={carouselContainerRef} className="w-full px-2.5 md:px-0 ">
+          <Carousel
+            setApi={setApi}
+            opts={{
+              align: "center",
+              loop: true,
+            }}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-2 md:-ml-4">
+              {projects.map((project, index) => (
+                <CarouselItem key={index} className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
+                  <div ref={(el) => {
+                    projectCardRefs.current[index] = el;
+                  }}>
+                    <ProjectCard
+                      {...project}
+                      isCentered={index === selectedIndex}
+                      onCenterClick={() => {
+                        console.log('onCenterClick called:', { index, selectedIndex, isCenter: index === selectedIndex });
+                        if (index === selectedIndex) {
+                          console.log('Clicking on center project - should toggle details');
+                        } else {
+                          console.log('Clicking on non-center project - scrolling to:', index);
+                          api?.scrollTo(index);
+                        }
+                      }}
+                      onMouseEnter={() => handleProjectCardHover(index)}
+                      onMouseLeave={handleMouseLeave}
+                      onShowDetailsChange={(showingDetails) => {
+                        if(index !== selectedIndex) return; // ignore non-centered cards
+                        console.log(`[${Date.now()}] onShowDetailsChange (center card) called:`, {index, selectedIndex, showingDetails});
+                        setCenterProjectShowingDetails(showingDetails);
+                      }}
+                    />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+        </div>
         
         {/* Position Indicators - Mobile Only */}
         <div className="flex justify-center mt-6 md:hidden">
           <div className="flex gap-1">
-            {projects.map((_, index) => (
-              <span
-                key={index}
-                className={`inline-block rounded-full transition-all duration-200 ${
-                  index === selectedIndex ? 'bg-black' : 'bg-gray-400'
-                }`}
-                style={{ 
-                  width: '10px', 
-                  height: '10px',
-                  cursor: 'none'
-                }}
-                onClick={() => api?.scrollTo(index)}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-              />
-            ))}
+            {projects.map((_, index) => {
+              // Cycle through the three colors: FF5900 (orange), 008CFF (blue), B2FF00 (green)
+              const colors = ['#FF5900', '#008CFF', '#B2FF00'];
+              const colorIndex = index % colors.length;
+              const isActive = index === selectedIndex;
+              
+              return (
+                <span
+                  key={index}
+                  className="inline-block rounded-full transition-all duration-200"
+                  style={{ 
+                    width: '10px', 
+                    height: '10px',
+                    cursor: 'none',
+                    backgroundColor: isActive ? colors[colorIndex] : colors[colorIndex] + '40', // 40 = 25% opacity for inactive
+                    border: isActive ? `2px solid ${colors[colorIndex]}` : 'none'
+                  }}
+                  onClick={() => api?.scrollTo(index)}
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
+                />
+              );
+            })}
           </div>
         </div>
       </section>

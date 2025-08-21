@@ -1,0 +1,67 @@
+[
+{
+    "imageSrc": "/projectimages/floating-notes.avif",
+    "imageAlt": "Floating Notes App",
+    "title": "Floating Notes",
+    "description": "A simple note taking app",
+    "detailedDescription": "I made Floating Notes in SwiftUI as an alternative to raycast notes but free and open source as I thought $15 was a bit much for a note taking app",
+    "links": [
+    { "type": "blog", "url": "#" },
+    { "type": "github", "url": "#" }
+    ],
+    "techStack": {
+        "swift": true
+    }
+},
+{
+    "imageSrc": "/projectimages/qtm.avif",
+    "imageAlt": "Quotes that Matter App",
+    "title": "Quotes that Matter",
+    "description": "Giving great quotes the attention they deserve",
+    "detailedDescription": "I made Quotes that Matter as a way to showcase meaningful quotes in an elegant interface. I felt like there was a lack of good quote apps out there and I wanted to make one that was easy to use and looked good.",
+    "links": [
+    { "type": "blog", "url": "#" },
+    { "type": "github", "url": "#" }
+    ],
+    "techStack": {
+        "nextjs": true,
+        "react": true,
+        "typescript": true,
+        "convex": true,
+        "vercel": true
+    }
+},
+{
+    "imageSrc": "/projectimages/just-save-it.avif",
+    "imageAlt": "Just $ave It App",
+    "title": "Just $ave It",
+    "description": "See what you could be worth if you just saved it",
+    "detailedDescription": "I created Just $ave It as a way to visualize the power of saving money over time with compound interest calculations. ",
+    "links": [
+    { "type": "blog", "url": "#" },
+    { "type": "github", "url": "#" }
+    ],
+    "techStack": {
+        "nextjs": true,
+        "react": true,
+        "typescript": true,
+        "convex": true,
+        "vercel": true
+    }
+},
+{
+    "imageSrc": "/projectimages/spellcheck.avif",
+    "imageAlt": "Spellcheck App",
+    "title": "Spellcheck",
+    "description": "A simple spellcheck app",
+    "detailedDescription": "I made Spellcheck as a simple spellcheck app that uses the OpenAI API to check the spelling of a word. I wanted to make a simple app that was easy to use and looked good.",
+    "links": [
+    { "type": "blog", "url": "#" },
+    { "type": "github", "url": "#" }
+    ],
+    "techStack": {
+        "swift": true,
+        "openai": true
+    }
+}
+]
