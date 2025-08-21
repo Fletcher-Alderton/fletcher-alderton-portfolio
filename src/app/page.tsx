@@ -38,7 +38,7 @@ export default function Home() {
   const projectCardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const carouselContainerRef = useRef<HTMLDivElement>(null);
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     try {
       const response = await fetch('/api/send', {
         method: 'POST',
@@ -65,7 +65,7 @@ export default function Home() {
       console.error('An error occurred while sending the email:', error);
       // Optionally, show an error message to the user
     }
-  };
+  }, [name, email, note]);
 
   // Debug effect to track centerProjectShowingDetails changes
   useEffect(() => {
@@ -115,7 +115,7 @@ export default function Home() {
     return () => {
       window.removeEventListener('click', handleGlobalClick, true);
     };
-  }, [isFormValid, name, email, note, hasFinePointer]); // Ensure handleSubmit has fresh state
+  }, [isFormValid, name, email, note, hasFinePointer, handleSubmit]); // Ensure handleSubmit has fresh state
 
   // Update cursor icon reactively
   useEffect(() => {
@@ -187,7 +187,7 @@ export default function Home() {
     if (!mounted || projectCardRefs.current.length === 0) return;
     
     const observer = new IntersectionObserver(
-      (entries) => {
+      () => {
         // Debounce the centering calculation to avoid too many updates
         const timeoutId = setTimeout(() => {
           const newCenteredIndex = determineCenteredProject();
@@ -466,13 +466,13 @@ export default function Home() {
                 screenShape === 'wide_short' ? 'text-xl' :
                 'text-lg sm:text-xl md:text-2xl lg:text-xl '
               }`}>
-                Hi, I'm Fletcher, a full-stack developer based in Melbourne, Australia. I'm passionate about creating everything from complex, over-engineered apps to simple tools that make everyday life easier. With over 5 years of curiosity-driven experience in technology.
+                Hi, I&apos;m Fletcher, a full-stack developer based in Melbourne, Australia. I&apos;m passionate about creating everything from complex, over-engineered apps to simple tools that make everyday life easier. With over 5 years of curiosity-driven experience in technology.
                 <br />
                 <br />
-                Right now, I'm interning at Westpac while completing my university degree, gaining hands-on experience in building scalable, real-world applications.
+                Right now, I&apos;m interning at Westpac while completing my university degree, gaining hands-on experience in building scalable, real-world applications.
                 <br />
                 <br />
-                When I'm not coding, you'll probably find me exploring Melbourne's coffee scene, enjoying a glass of wine with friends, or jotting down my latest dev struggles and lessons learned here on the <a href="https://mostlytech.xyz" target="_blank" rel="noopener noreferrer" className="text-black font-bold hover:text-orange-500">blog</a>.
+                When I&apos;m not coding, you&apos;ll probably find me exploring Melbourne&apos;s coffee scene, enjoying a glass of wine with friends, or jotting down my latest dev struggles and lessons learned here on the <a href="https://mostlytech.xyz" target="_blank" rel="noopener noreferrer" className="text-black font-bold hover:text-orange-500">blog</a>.
                 <br />
               </p>
             </div>

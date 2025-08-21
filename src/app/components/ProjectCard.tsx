@@ -24,7 +24,7 @@ interface ProjectCardProps {
   description: string;
   detailedDescription: string;
   links: readonly ExternalLink[];
-  techStack: { [key: string]: boolean };
+  techStack: { [key: string]: boolean | undefined };
   isCentered: boolean;
   onCenterClick: () => void;
   onMouseEnter: () => void;
@@ -146,8 +146,8 @@ export default function ProjectCard({ imageSrc, imageAlt, title, description, de
                 <div className="h-px bg-black mb-3"></div>
                 <div className="flex items-center gap-3 flex-wrap">
                   {Object.entries(techStack)
-                    .filter(([_, isPresent]) => isPresent)
-                    .map(([tech, _], idx) => (
+                    .filter(([, isPresent]) => isPresent === true)
+                    .map(([tech], idx) => (
                     <div key={idx} className="inline-flex items-center gap-2 border border-black px-2 py-1 bg-white" title={tech}>
                       <TechIcon type={tech} />
                       <span className="text-sm font-serif text-black">{tech}</span>
