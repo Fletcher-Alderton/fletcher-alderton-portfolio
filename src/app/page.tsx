@@ -9,7 +9,7 @@ import {
   CarouselItem,
   type CarouselApi,
 } from "@/components/ui/carousel";
-import React from "react";
+ 
 import projects from "../../public/projects.json";
 
 export default function Home() {
@@ -19,10 +19,8 @@ export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [api, setApi] = useState<CarouselApi>();
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [isHoveringInteractive, setIsHoveringInteractive] = useState(false);
   const [cursorIcon, setCursorIcon] = useState<'plus' | 'minus' | 'arrow-left' | 'arrow-right' | 'arrow-up' | null>(null);
   const [centerProjectShowingDetails, setCenterProjectShowingDetails] = useState(false);
-  const prevIndexRef = React.useRef(0);
   const [hoveredProjectIndex, setHoveredProjectIndex] = useState<number | null>(null);
   
   const [name, setName] = useState('');
@@ -34,7 +32,7 @@ export default function Home() {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [hasFinePointer, setHasFinePointer] = useState(true);
   
-  // New refs for intersection observer
+  // Refs
   const projectCardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const carouselContainerRef = useRef<HTMLDivElement>(null);
 
@@ -49,7 +47,6 @@ export default function Home() {
       });
 
       if (response.ok) {
-        console.log('Email sent successfully');
         setName('');
         setEmail('');
         setNote('');
@@ -67,15 +64,7 @@ export default function Home() {
     }
   }, [name, email, note]);
 
-  // Debug effect to track centerProjectShowingDetails changes
-  useEffect(() => {
-    console.log(`[${Date.now()}] centerProjectShowingDetails changed to:`, centerProjectShowingDetails);
-  }, [centerProjectShowingDetails]);
-
-  // Debug effect to track cursorIcon changes
-  useEffect(() => {
-    console.log(`[${Date.now()}] cursorIcon changed to:`, cursorIcon);
-  }, [cursorIcon]);
+  // (clean) Removed debug effects
 
   // Form validation effect
   useEffect(() => {
@@ -117,42 +106,55 @@ export default function Home() {
     };
   }, [isFormValid, name, email, note, hasFinePointer, handleSubmit]); // Ensure handleSubmit has fresh state
 
-  // Update cursor icon reactively
+  // Update cursor icon reactively: show arrows based on carousel thirds, plus/minus for center card, arrow-up for form
   useEffect(() => {
     if (isFormValid) {
       setCursorIcon('arrow-up');
-      return; // Form submission is the highest priority cursor
-    }
-
-    if (hoveredProjectIndex === null) {
-      setCursorIcon(null); // No project card is hovered
       return;
     }
 
-    if (hoveredProjectIndex === selectedIndex) {
+    const container = carouselContainerRef.current;
+    if (container && hasFinePointer) {
+      const rect = container.getBoundingClientRect();
+      const { x, y } = mousePosition;
+      const inside = x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+      if (inside) {
+        const thirdWidth = rect.width / 3;
+        const leftBoundary = rect.left + thirdWidth;
+        const rightBoundary = rect.right - thirdWidth;
+
+        if (x < leftBoundary) {
+          setCursorIcon('arrow-left');
+          return;
+        }
+        if (x > rightBoundary) {
+          setCursorIcon('arrow-right');
+          return;
+        }
+
+        // Center third: prefer plus/minus for centered card if hovered
+        if (hoveredProjectIndex !== null && hoveredProjectIndex === selectedIndex) {
+          setCursorIcon(centerProjectShowingDetails ? 'minus' : 'plus');
+        } else {
+          setCursorIcon(null);
+        }
+        return;
+      }
+    }
+
+    // Outside carousel: plus/minus for centered card hover, else nothing
+    if (hoveredProjectIndex !== null && hoveredProjectIndex === selectedIndex) {
       setCursorIcon(centerProjectShowingDetails ? 'minus' : 'plus');
     } else {
-      const num = projects.length;
-      const distRight = (hoveredProjectIndex - selectedIndex + num) % num;
-      const distLeft  = (selectedIndex - hoveredProjectIndex + num) % num;
-      setCursorIcon(distLeft < distRight ? 'arrow-left' : 'arrow-right');
+      setCursorIcon(null);
     }
-  }, [isFormValid, hoveredProjectIndex, selectedIndex, centerProjectShowingDetails]);
+  }, [isFormValid, hoveredProjectIndex, selectedIndex, centerProjectShowingDetails, mousePosition, hasFinePointer]);
 
-  const handleMouseEnter = () => {
-    console.log(`[${Date.now()}] handleMouseEnter. formCompletionCount: ${formCompletionCount}`);
-    if(formCompletionCount > 0) return;
-    setIsHoveringInteractive(true);
-  }
   const handleMouseLeave = () => {
-    console.log(`[${Date.now()}] handleMouseLeave. formCompletionCount: ${formCompletionCount}`);
     setHoveredProjectIndex(null);
-    setIsHoveringInteractive(false);
   };
 
   const handleProjectCardHover = (index: number) => {
-    console.log(`[${Date.now()}] handleProjectCardHover. formCompletionCount: ${formCompletionCount}, index: ${index}`);
-    if(formCompletionCount === 0) setIsHoveringInteractive(true);
     setHoveredProjectIndex(index);
   };
 
@@ -192,9 +194,7 @@ export default function Home() {
         const timeoutId = setTimeout(() => {
           const newCenteredIndex = determineCenteredProject();
           if (newCenteredIndex !== selectedIndex) {
-            console.log(`[${Date.now()}] Centered project changed from ${selectedIndex} to ${newCenteredIndex}`);
             setSelectedIndex(newCenteredIndex);
-            // Reset details when centering changes
             setCenterProjectShowingDetails(false);
           }
         }, 100);
@@ -260,27 +260,15 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (!api) {
-      console.log(`[${Date.now()}] Carousel API not ready yet`);
-      return;
-    }
-
-    console.log(`[${Date.now()}] Carousel API is ready, setting up listeners`);
-    
-    // Initialize with the first project as centered
+    if (!api) return;
+    // Initialize with the first project as centered; intersection observer will update thereafter
     setSelectedIndex(0);
-    prevIndexRef.current = 0;
-    
-    // We'll let the intersection observer handle centering from now on
-    // but keep the API for scrolling functionality
   }, [api]);
 
   let cursorBgClass = 'bg-gray-300/30 border-gray-300/50';
   if (formCompletionCount === 1) cursorBgClass = 'bg-orange-500/20 border-orange-400/30';
   if (formCompletionCount === 2) cursorBgClass = 'bg-orange-500/50 border-orange-400/60';
   if (formCompletionCount === 3) cursorBgClass = 'bg-orange-500 border-orange-400';
-
-  const shouldShrink = isHoveringInteractive && !cursorIcon && formCompletionCount === 0;
 
   return (
     <div className="relative min-h-screen bg-neutral-50 overflow-x-hidden overflow-y-auto" style={hasFinePointer ? { cursor: 'none' } : undefined}>
@@ -294,9 +282,7 @@ export default function Home() {
         >
           {/* The actual cursor circle */}
           <div
-            className={`transition-all duration-100 border ease-out shadow-lg flex items-center justify-center rounded-full backdrop-blur-md ${
-              shouldShrink ? 'w-4 h-4' : 'w-10 h-10'
-            } ${cursorBgClass}`}
+            className={`transition-all duration-100 border ease-out shadow-lg flex items-center justify-center rounded-full backdrop-blur-md w-10 h-10 ${cursorBgClass}`}
             style={{
               transform: `translate(-50%, -50%)`,
             }}
@@ -409,7 +395,6 @@ export default function Home() {
           <button 
             className="md:hidden text-black p-2"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             style={{ cursor: 'none' }}
           >
@@ -420,9 +405,9 @@ export default function Home() {
 
           {/* Desktop navigation */}
           <div className="hidden md:flex space-x-6 lg:space-x-8">
-            <a href="#info" className="text-xl lg:text-3xl font-serif text-black hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Info</a>
-            <a href="#projects" className="text-xl lg:text-3xl font-serif text-black hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Projects</a>
-            <a href="#contact" className="text-xl lg:text-3xl font-serif text-black hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Contact</a>
+            <a href="#info" className="text-xl lg:text-3xl font-serif text-black hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Info</a>
+            <a href="#projects" className="text-xl lg:text-3xl font-serif text-black hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Projects</a>
+            <a href="#contact" className="text-xl lg:text-3xl font-serif text-black hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Contact</a>
           </div>
         </nav>
 
@@ -430,9 +415,9 @@ export default function Home() {
         {isMenuOpen && (
           <div className="md:hidden absolute top-full left-0 right-0 bg-neutral-50 z-50">
             <div className="px-4 divide-y divide-black border-t border-black mx-4">
-              <a href="#info" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity py-4" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Info</a>
-              <a href="#projects" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity py-4" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Projects</a>
-              <a href="#contact" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity py-4" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>Contact</a>
+              <a href="#info" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity py-4" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Info</a>
+              <a href="#projects" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity py-4" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Projects</a>
+              <a href="#contact" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity py-4" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Contact</a>
             </div>
           </div>
         )}
@@ -504,7 +489,7 @@ export default function Home() {
         </div>
         
         {/* Carousel Container with ref for intersection observer */}
-        <div ref={carouselContainerRef} className="w-full px-2.5 md:px-0 ">
+        <div ref={carouselContainerRef} className="w-full px-2.5 md:px-0 relative">
           <Carousel
             setApi={setApi}
             opts={{
@@ -523,11 +508,7 @@ export default function Home() {
                       {...project}
                       isCentered={index === selectedIndex}
                       onCenterClick={() => {
-                        console.log('onCenterClick called:', { index, selectedIndex, isCenter: index === selectedIndex });
-                        if (index === selectedIndex) {
-                          console.log('Clicking on center project - should toggle details');
-                        } else {
-                          console.log('Clicking on non-center project - scrolling to:', index);
+                        if (index !== selectedIndex) {
                           api?.scrollTo(index);
                         }
                       }}
@@ -535,7 +516,6 @@ export default function Home() {
                       onMouseLeave={handleMouseLeave}
                       onShowDetailsChange={(showingDetails) => {
                         if(index !== selectedIndex) return; // ignore non-centered cards
-                        console.log(`[${Date.now()}] onShowDetailsChange (center card) called:`, {index, selectedIndex, showingDetails});
                         setCenterProjectShowingDetails(showingDetails);
                       }}
                     />
@@ -544,6 +524,35 @@ export default function Home() {
               ))}
             </CarouselContent>
           </Carousel>
+          {hasFinePointer && (
+            <div className="pointer-events-none absolute inset-0 z-40" aria-hidden="true" role="presentation">
+              {/* Left third clickable zone */}
+              <div
+                className="absolute inset-y-0 left-0 pointer-events-auto"
+                style={{ width: '33.3333%' }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  api?.scrollPrev();
+                }}
+                aria-label="Previous slide"
+              />
+              {/* Center third (pass-through) */}
+              <div
+                className="absolute inset-y-0"
+                style={{ left: '33.3333%', width: '33.3333%' }}
+              />
+              {/* Right third clickable zone */}
+              <div
+                className="absolute inset-y-0 right-0 pointer-events-auto"
+                style={{ width: '33.3333%' }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  api?.scrollNext();
+                }}
+                aria-label="Next slide"
+              />
+            </div>
+          )}
         </div>
         
         {/* Position Indicators - Mobile Only */}
@@ -567,7 +576,6 @@ export default function Home() {
                     border: isActive ? `2px solid ${colors[colorIndex]}` : 'none'
                   }}
                   onClick={() => api?.scrollTo(index)}
-                  onMouseEnter={handleMouseEnter}
                   onMouseLeave={handleMouseLeave}
                 />
               );
@@ -597,7 +605,6 @@ export default function Home() {
                   screenShape === 'classic' ? 'text-2xl md:text-3xl' : 'text-2xl md:text-3xl'
                 }`}
                 style={{ cursor: 'none' }}
-                onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
               >Your Name</label>
               <input 
@@ -606,7 +613,6 @@ export default function Home() {
                   screenShape === 'classic' ? 'h-14' : 'h-14'
                 }`}
                 style={{ cursor: 'none' }}
-                onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -624,7 +630,6 @@ export default function Home() {
                   screenShape === 'classic' ? 'text-2xl md:text-3xl' : 'text-2xl md:text-3xl'
                 }`}
                 style={{ cursor: 'none' }}
-                onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
               >Email</label>
               <input 
@@ -633,7 +638,6 @@ export default function Home() {
                   screenShape === 'classic' ? 'h-14' : 'h-14'
                 }`}
                 style={{ cursor: 'none' }}
-                onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -649,7 +653,6 @@ export default function Home() {
                   screenShape === 'classic' ? 'text-2xl md:text-3xl' : 'text-2xl md:text-3xl'
                 }`}
                 style={{ cursor: 'none' }}
-                onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
               >A little Note</label>
               <textarea 
@@ -658,7 +661,6 @@ export default function Home() {
                 }`}
                 placeholder=""
                 style={{ cursor: 'none' }}
-                onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 value={note}
                 onChange={(e) => setNote(e.target.value)}

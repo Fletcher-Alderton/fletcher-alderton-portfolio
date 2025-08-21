@@ -42,17 +42,14 @@ export default function ProjectCard({ imageSrc, imageAlt, title, description, de
   }, [isCentered]);
 
   useEffect(() => {
-    console.log(`[${Date.now()}] ProjectCard showDetails useEffect:`, { showDetails });
     onShowDetailsChange(showDetails);
   }, [showDetails, onShowDetailsChange]);
 
   const handleClick = () => {
     if (isCentered) {
       const newShowDetails = !showDetails;
-      console.log(`[${Date.now()}] ProjectCard handleClick:`, { isCentered, currentShowDetails: showDetails, newShowDetails });
       setShowDetails(newShowDetails);
     } else {
-      console.log(`[${Date.now()}] ProjectCard handleClick - calling onCenterClick`);
       onCenterClick();
     }
   };
