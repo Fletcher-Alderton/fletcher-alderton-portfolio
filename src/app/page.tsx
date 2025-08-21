@@ -5,10 +5,15 @@ import { SparklesText } from "@/components/magicui/sparkles-text";
 import ProjectCard from "./components/ProjectCard";
 import {
   Carousel,
-  CarouselContent,
-  CarouselItem,
-  type CarouselApi,
 } from "@/components/ui/carousel";
+import type Slider from "react-slick";
+
+// Extend window interface to include carouselSlider
+declare global {
+  interface Window {
+    carouselSlider: Slider | null;
+  }
+}
  
 import projects from "../../public/projects.json";
 
@@ -17,12 +22,11 @@ export default function Home() {
   const [screenShape, setScreenShape] = useState<'phone' | 'square' | 'classic' | 'mac' | 'wide_short' | 'wide' | 'ultrawide' | 'unknown'>('wide'); // Default to wide for SSR
   const [mounted, setMounted] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [api, setApi] = useState<CarouselApi>();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [cursorIcon, setCursorIcon] = useState<'plus' | 'minus' | 'arrow-left' | 'arrow-right' | 'arrow-up' | null>(null);
   const [centerProjectShowingDetails, setCenterProjectShowingDetails] = useState(false);
   const [hoveredProjectIndex, setHoveredProjectIndex] = useState<number | null>(null);
-  
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [note, setNote] = useState('');
@@ -31,9 +35,8 @@ export default function Home() {
   const [isNoteValid, setIsNoteValid] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [hasFinePointer, setHasFinePointer] = useState(true);
-  
+
   // Refs
-  const projectCardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const carouselContainerRef = useRef<HTMLDivElement>(null);
 
   const handleSubmit = useCallback(async () => {
@@ -83,7 +86,10 @@ export default function Home() {
   // Detect whether the current device has a precise pointer (mouse/track-pad)
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    setHasFinePointer(window.matchMedia('(pointer:fine)').matches);
+    const isFinePointer = window.matchMedia('(pointer:fine)').matches;
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    // Only enable fine pointer features if it's a fine pointer device AND not a touch device
+    setHasFinePointer(isFinePointer && !isTouchDevice);
   }, []);
 
   // Global click listener for form submission (mouse devices only)
@@ -134,7 +140,8 @@ export default function Home() {
 
         // Center third: prefer plus/minus for centered card if hovered
         if (hoveredProjectIndex !== null && hoveredProjectIndex === selectedIndex) {
-          setCursorIcon(centerProjectShowingDetails ? 'minus' : 'plus');
+          const newIcon = centerProjectShowingDetails ? 'minus' : 'plus';
+          setCursorIcon(newIcon);
         } else {
           setCursorIcon(null);
         }
@@ -158,74 +165,30 @@ export default function Home() {
     setHoveredProjectIndex(index);
   };
 
-  // New function to determine which project is centered using Intersection Observer
-  const determineCenteredProject = useCallback(() => {
-    if (!carouselContainerRef.current || projectCardRefs.current.length === 0) return 0;
-    
-    const containerRect = carouselContainerRef.current.getBoundingClientRect();
-    const containerCenter = containerRect.left + containerRect.width / 2;
-    
-    let closestIndex = 0;
-    let closestDistance = Infinity;
-    
-    projectCardRefs.current.forEach((cardRef, index) => {
-      if (!cardRef) return;
-      
-      const cardRect = cardRef.getBoundingClientRect();
-      const cardCenter = cardRect.left + cardRect.width / 2;
-      const distance = Math.abs(cardCenter - containerCenter);
-      
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        closestIndex = index;
-      }
-    });
-    
-    return closestIndex;
+  // Handle carousel slide changes
+  const handleSlideChange = useCallback((current: number, next: number) => {
+    setSelectedIndex(next);
+    setCenterProjectShowingDetails(false);
   }, []);
 
-  // Set up intersection observer to track which project is centered
-  useEffect(() => {
-    if (!mounted || projectCardRefs.current.length === 0) return;
-    
-    const observer = new IntersectionObserver(
-      () => {
-        // Debounce the centering calculation to avoid too many updates
-        const timeoutId = setTimeout(() => {
-          const newCenteredIndex = determineCenteredProject();
-          if (newCenteredIndex !== selectedIndex) {
-            setSelectedIndex(newCenteredIndex);
-            setCenterProjectShowingDetails(false);
-          }
-        }, 100);
-        
-        return () => clearTimeout(timeoutId);
-      },
-      {
-        root: carouselContainerRef.current,
-        rootMargin: '0px',
-        threshold: 0.5, // Trigger when 50% of the card is visible
+  // Handle center click for project cards
+  const handleCenterClick = useCallback((index: number) => {
+    // With React Slick, we don't need to manually scroll to slides
+    // The carousel handles navigation automatically
+    if (index !== selectedIndex) {
+      // This will be handled by the carousel's built-in navigation
+      const slider = window.carouselSlider;
+      if (slider && slider.slickGoTo) {
+        slider.slickGoTo(index);
       }
-    );
-    
-    // Observe all project cards
-    projectCardRefs.current.forEach((cardRef) => {
-      if (cardRef) observer.observe(cardRef);
-    });
-    
-    return () => observer.disconnect();
-  }, [mounted, determineCenteredProject, selectedIndex]);
-
-  // Initialize project card refs
-  useEffect(() => {
-    projectCardRefs.current = new Array(projects.length).fill(null);
-  }, []);
+    }
+  }, [selectedIndex]);
 
   const updateScreenShape = () => {
     if (typeof window === 'undefined') return;
-    
+
     const aspectRatio = window.innerWidth / window.innerHeight;
-    
+
     if (aspectRatio <= 3/4) {
       setScreenShape('phone'); // Portrait phones and very tall screens - too many to count
     } else if (aspectRatio <= 4/3) {
@@ -252,18 +215,12 @@ export default function Home() {
     updateScreenShape();
     window.addEventListener('resize', updateScreenShape);
     window.addEventListener('mousemove', handleMouseMove);
-    
+
     return () => {
       window.removeEventListener('resize', updateScreenShape);
       window.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
-
-  useEffect(() => {
-    if (!api) return;
-    // Initialize with the first project as centered; intersection observer will update thereafter
-    setSelectedIndex(0);
-  }, [api]);
 
   let cursorBgClass = 'bg-gray-300/30 border-gray-300/50';
   if (formCompletionCount === 1) cursorBgClass = 'bg-orange-500/20 border-orange-400/30';
@@ -271,13 +228,14 @@ export default function Home() {
   if (formCompletionCount === 3) cursorBgClass = 'bg-orange-500 border-orange-400';
 
   return (
-    <div className="relative min-h-screen bg-neutral-50 overflow-x-hidden overflow-y-auto" style={hasFinePointer ? { cursor: 'none' } : undefined}>
+    <div className="relative min-h-screen bg-neutral-50" style={hasFinePointer ? { cursor: 'none' } : undefined}>
       {/* Custom Cursor */}
       {mounted && hasFinePointer && (
         <div
-          className="fixed top-0 left-0 pointer-events-none z-[9999]"
+          className="fixed top-0 left-0 pointer-events-none"
           style={{
             transform: `translate(${mousePosition.x}px, ${mousePosition.y}px)`,
+            zIndex: 2147483647,
           }}
         >
           {/* The actual cursor circle */}
@@ -287,8 +245,8 @@ export default function Home() {
               transform: `translate(-50%, -50%)`,
             }}
           >
-            {cursorIcon === 'plus' && <span className="text-[#9fe202] text-3xl font-thin leading-none">+</span>}
-            {cursorIcon === 'minus' && <span className="text-[#FF5900] text-3xl font-thin leading-none">−</span>}
+            {cursorIcon === 'plus' && <span className="text-[#9fe202] text-3xl font-thin leading-none relative top-[-1px]">+</span>}
+            {cursorIcon === 'minus' && <span className="text-[#FF5900] text-3xl font-thin leading-none relative top-[-1px]">−</span>}
             {cursorIcon === 'arrow-left' && (
               <svg className="w-6 h-6 text-[#008CFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -488,42 +446,38 @@ export default function Home() {
           <div className="w-40 sm:w-44 md:w-52 h-px bg-black mb-8 md:mb-12 lg:mb-16"></div>
         </div>
         
-        {/* Carousel Container with ref for intersection observer */}
-        <div ref={carouselContainerRef} className="w-full px-2.5 md:px-0 relative">
+        {/* Carousel Container */}
+        <div ref={carouselContainerRef} className="carousel-container w-full relative px-4 sm:px-6 md:px-8 lg:px-0">
           <Carousel
-            setApi={setApi}
+            setApi={(api) => {
+              // Store the slider API for navigation
+              window.carouselSlider = api;
+            }}
             opts={{
-              align: "center",
-              loop: true,
+              beforeChange: handleSlideChange,
             }}
             className="w-full"
           >
-            <CarouselContent className="-ml-2 md:-ml-4">
-              {projects.map((project, index) => (
-                <CarouselItem key={index} className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
-                  <div ref={(el) => {
-                    projectCardRefs.current[index] = el;
-                  }}>
-                    <ProjectCard
-                      {...project}
-                      isCentered={index === selectedIndex}
-                      onCenterClick={() => {
-                        if (index !== selectedIndex) {
-                          api?.scrollTo(index);
-                        }
-                      }}
-                      onMouseEnter={() => handleProjectCardHover(index)}
-                      onMouseLeave={handleMouseLeave}
-                      onShowDetailsChange={(showingDetails) => {
-                        if(index !== selectedIndex) return; // ignore non-centered cards
-                        setCenterProjectShowingDetails(showingDetails);
-                      }}
-                    />
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
+            {projects.map((project, index) => (
+              <ProjectCard
+                key={index}
+                {...project}
+                isCentered={index === selectedIndex}
+                onCenterClick={() => handleCenterClick(index)}
+                onMouseEnter={() => handleProjectCardHover(index)}
+                onMouseLeave={handleMouseLeave}
+                                  onShowDetailsChange={(showingDetails) => {
+                    if(index !== selectedIndex) return; // ignore non-centered cards
+                    // Debounce the state update to prevent rapid true/false switching
+                    setTimeout(() => {
+                      setCenterProjectShowingDetails(showingDetails);
+                    }, 10);
+                  }}
+              />
+            ))}
           </Carousel>
+
+          {/* Click overlay for carousel navigation - desktop only */}
           {hasFinePointer && (
             <div className="pointer-events-none absolute inset-0 z-40" aria-hidden="true" role="presentation">
               {/* Left third clickable zone */}
@@ -532,7 +486,11 @@ export default function Home() {
                 style={{ width: '33.3333%' }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  api?.scrollPrev();
+                  // Use React Slick's slickPrev method via window reference
+                  const slider = window.carouselSlider;
+                  if (slider && slider.slickPrev) {
+                    slider.slickPrev();
+                  }
                 }}
                 aria-label="Previous slide"
               />
@@ -547,7 +505,11 @@ export default function Home() {
                 style={{ width: '33.3333%' }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  api?.scrollNext();
+                  // Use React Slick's slickNext method via window reference
+                  const slider = window.carouselSlider;
+                  if (slider && slider.slickNext) {
+                    slider.slickNext();
+                  }
                 }}
                 aria-label="Next slide"
               />
@@ -568,14 +530,13 @@ export default function Home() {
                 <span
                   key={index}
                   className="inline-block rounded-full transition-all duration-200"
-                  style={{ 
-                    width: '10px', 
+                  style={{
+                    width: '10px',
                     height: '10px',
                     cursor: 'none',
                     backgroundColor: isActive ? colors[colorIndex] : colors[colorIndex] + '40', // 40 = 25% opacity for inactive
                     border: isActive ? `2px solid ${colors[colorIndex]}` : 'none'
                   }}
-                  onClick={() => api?.scrollTo(index)}
                   onMouseLeave={handleMouseLeave}
                 />
               );

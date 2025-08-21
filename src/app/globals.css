@@ -61,6 +61,21 @@ html {
   }
 }
 
+/* Disable touch-action manipulation on touch devices */
+@media (pointer: coarse) {
+  * {
+    touch-action: manipulation;
+  }
+
+  /* Ensure carousel and interactive elements work properly on touch */
+  .carousel-container,
+  .slick-slider,
+  .slick-list,
+  .slick-track {
+    touch-action: pan-y pinch-zoom;
+  }
+}
+
 /* Better text scaling for very small screens */
 @media (max-width: 480px) {
   html {
@@ -144,6 +159,8 @@ html {
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+
+
 
 @layer base {
   * {

@@ -35,20 +35,24 @@ interface ProjectCardProps {
 export default function ProjectCard({ imageSrc, imageAlt, title, description, detailedDescription, links, techStack, isCentered, onCenterClick, onMouseEnter, onMouseLeave, onShowDetailsChange }: ProjectCardProps) {
   const [showDetails, setShowDetails] = useState(false);
 
-  useEffect(() => {
-    if (!isCentered) {
-      setShowDetails(false);
-    }
-  }, [isCentered]);
+  // Function to handle showDetails changes and notify parent
+  const handleShowDetailsChange = (newShowDetails: boolean) => {
+    setShowDetails(newShowDetails);
+    onShowDetailsChange(newShowDetails);
+  };
 
   useEffect(() => {
-    onShowDetailsChange(showDetails);
-  }, [showDetails, onShowDetailsChange]);
+    if (!isCentered && showDetails) {
+      // Only hide details if card is not centered AND currently showing details
+      setShowDetails(false);
+      onShowDetailsChange(false);
+    }
+  }, [isCentered, showDetails, onShowDetailsChange]);
 
   const handleClick = () => {
     if (isCentered) {
       const newShowDetails = !showDetails;
-      setShowDetails(newShowDetails);
+      handleShowDetailsChange(newShowDetails);
     } else {
       onCenterClick();
     }
@@ -89,7 +93,7 @@ export default function ProjectCard({ imageSrc, imageAlt, title, description, de
         onMouseLeave={onMouseLeave}
       >
         <div 
-          className="aspect-square relative overflow-hidden shadow-lg cursor-pointer"
+          className="aspect-square relative shadow-lg cursor-pointer"
           onClick={handleClick}
           style={{ cursor: 'none' }}
         >
@@ -160,13 +164,13 @@ export default function ProjectCard({ imageSrc, imageAlt, title, description, de
   }
 
   return (
-    <div 
-      className={`relative group transition-transform duration-300 ease-in-out ${isCentered ? 'transform scale-100' : 'transform scale-90'}`}
+    <div
+      className={`relative group transition-transform duration-300 ease-in-out mb-8 ${isCentered ? 'transform scale-100' : 'transform scale-90'}`}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <div 
-        className="bg-gray-200 aspect-square relative overflow-hidden shadow-lg cursor-pointer"
+      <div
+        className="bg-gray-200 aspect-square relative shadow-lg cursor-pointer"
         onClick={handleClick}
         style={{ cursor: 'none' }}
       >
