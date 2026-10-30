@@ -1,0 +1,459 @@
+[
+  {
+    "imageSrc": "/projectimages/contrib-search.avif",
+    "poster": true,
+    "imageAlt": "Search — a small, fast WebKit browser for macOS",
+    "title": "Search",
+    "description": "A small, fast WebKit browser for macOS",
+    "detailedDescription": "A favicon-only sidebar that behaves like a browser rail: Helium-sized hit targets, per-tab memory, hover previews and a hover toolbar that stays out of the way until you need it.",
+    "repo": "driceroland/Search",
+    "stars": 2763,
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/driceroland/Search"
+      }
+    ],
+    "pullRequests": [
+      {
+        "number": 797,
+        "state": "open",
+        "title": "Favicon-only sidebar: Helium-sized rail, tab memory, hover previews and a top hover toolbar",
+        "url": "https://github.com/driceroland/Search/pull/797"
+      }
+    ],
+    "techStack": {
+      "swift": true,
+      "macos": true
+    }
+  },
+  {
+    "imageSrc": "/projectimages/contrib-kage.avif",
+    "poster": true,
+    "imageAlt": "kage — a hackable coding agent for your terminal",
+    "title": "kage",
+    "description": "A fast, hackable coding agent for your terminal, editor and browser",
+    "detailedDescription": "Made every tool individually configurable under [tools.<name>] so a single tool can be tuned, disabled or pointed at a different binary without touching the rest of the agent.",
+    "repo": "QaidVoid/kage",
+    "stars": 4,
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/QaidVoid/kage"
+      }
+    ],
+    "pullRequests": [
+      {
+        "number": 184,
+        "state": "merged",
+        "title": "feat(tools): configure every tool under [tools.<name>]",
+        "url": "https://github.com/QaidVoid/kage/pull/184"
+      }
+    ],
+    "techStack": {
+      "rust": true
+    }
+  },
+  {
+    "imageSrc": "/projectimages/contrib-routectl.avif",
+    "poster": true,
+    "imageAlt": "routectl — a local LLM router",
+    "title": "routectl",
+    "description": "A local LLM router with OpenAI and Anthropic format translation",
+    "detailedDescription": "Two patches: hardening auth, routing, streaming and proxy admission across the request path, and adding Responses previous_response_id chaining with retrieval and request echo on the ingress side.",
+    "repo": "meepolabs/routectl",
+    "stars": 18,
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/meepolabs/routectl"
+      }
+    ],
+    "pullRequests": [
+      {
+        "number": 102,
+        "state": "open",
+        "title": "fix: harden auth, routing, streaming, and proxy admission",
+        "url": "https://github.com/meepolabs/routectl/pull/102"
+      },
+      {
+        "number": 101,
+        "state": "open",
+        "title": "feat(ingress): Responses previous_response_id chaining, retrieval, and request echo",
+        "url": "https://github.com/meepolabs/routectl/pull/101"
+      }
+    ],
+    "techStack": {
+      "rust": true
+    }
+  },
+  {
+    "imageSrc": "/projectimages/contrib-stasis.avif",
+    "poster": true,
+    "imageAlt": "Stasis — a smarter MacBook battery icon",
+    "title": "Stasis",
+    "description": "A smarter battery icon for MacBook",
+    "detailedDescription": "Reworked the menu bar charging controls so charge limits and power metrics can be read and changed without opening the full window.",
+    "repo": "DinanathDash/Stasis",
+    "stars": 23,
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/DinanathDash/Stasis"
+      }
+    ],
+    "pullRequests": [
+      {
+        "number": 51,
+        "state": "merged",
+        "title": "feat: improve menu bar charging controls",
+        "url": "https://github.com/DinanathDash/Stasis/pull/51"
+      }
+    ],
+    "techStack": {
+      "swift": true,
+      "macos": true
+    }
+  },
+  {
+    "imageSrc": "/projectimages/contrib-macmonitor.avif",
+    "poster": true,
+    "imageAlt": "MacMonitor — Apple Silicon system monitor",
+    "title": "MacMonitor",
+    "description": "Real-time Apple Silicon system monitor for the menu bar",
+    "detailedDescription": "Cut WindowServer activity so the monitor stops costing more than it measures, then added a compact CPU menu bar mode with adaptive themes.",
+    "repo": "ryyansafar/MacMonitor",
+    "stars": 110,
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/ryyansafar/MacMonitor"
+      }
+    ],
+    "pullRequests": [
+      {
+        "number": 33,
+        "state": "merged",
+        "title": "fix: reduce MacMonitor WindowServer activity",
+        "url": "https://github.com/ryyansafar/MacMonitor/pull/33"
+      },
+      {
+        "number": 14,
+        "state": "merged",
+        "title": "Add compact CPU menu bar and adaptive themes",
+        "url": "https://github.com/ryyansafar/MacMonitor/pull/14"
+      }
+    ],
+    "techStack": {
+      "objc": true,
+      "macos": true
+    }
+  },
+  {
+    "imageSrc": "/projectimages/contrib-homebrew-cask.avif",
+    "poster": true,
+    "imageAlt": "Homebrew Cask",
+    "title": "Homebrew Cask",
+    "description": "The default casks for the package manager for everywhere",
+    "detailedDescription": "Added the pi desktop app as a Homebrew cask so it installs and upgrades like any other macOS app.",
+    "repo": "Homebrew/homebrew-cask",
+    "stars": 22274,
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/Homebrew/homebrew-cask"
+      }
+    ],
+    "pullRequests": [
+      {
+        "number": 290638,
+        "state": "closed",
+        "title": "pi: add cask 0.15.10",
+        "url": "https://github.com/Homebrew/homebrew-cask/pull/290638"
+      }
+    ],
+    "techStack": {
+      "ruby": true,
+      "homebrew": true
+    }
+  },
+  {
+    "imageSrc": "/projectimages/contrib-splitwg.avif",
+    "poster": true,
+    "imageAlt": "SplitWG — WireGuard split tunnelling for macOS",
+    "title": "SplitWG",
+    "description": "A native macOS menu bar app for WireGuard",
+    "detailedDescription": "Eliminated an idle repaint loop that kept the app awake and cut the log and I/O footprint, taking idle CPU from roughly 34% to near zero.",
+    "repo": "KilimcininKorOglu/SplitWG",
+    "stars": 1,
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/KilimcininKorOglu/SplitWG"
+      }
+    ],
+    "pullRequests": [
+      {
+        "number": 12,
+        "state": "open",
+        "title": "perf: eliminate idle repaint loop and cut log/I/O footprint (34% → ~0% idle CPU)",
+        "url": "https://github.com/KilimcininKorOglu/SplitWG/pull/12"
+      }
+    ],
+    "techStack": {
+      "rust": true,
+      "macos": true
+    }
+  },
+  {
+    "imageSrc": "/projectimages/contrib-omniwm.avif",
+    "poster": true,
+    "imageAlt": "OmniWM — tiling window manager for macOS",
+    "title": "OmniWM",
+    "description": "Niri and Hyprland inspired tiling window manager for macOS",
+    "detailedDescription": "Added opt-in appearance controls for the workspace bar so it can be styled without changing the tiling behaviour underneath.",
+    "repo": "OmniNull/OmniWM",
+    "stars": 3486,
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/OmniNull/OmniWM"
+      }
+    ],
+    "pullRequests": [
+      {
+        "number": 669,
+        "state": "merged",
+        "title": "Add opt-in workspace bar appearance controls",
+        "url": "https://github.com/OmniNull/OmniWM/pull/669"
+      }
+    ],
+    "techStack": {
+      "swift": true,
+      "macos": true
+    }
+  },
+  {
+    "imageSrc": "/projectimages/contrib-omnigent.avif",
+    "poster": true,
+    "imageAlt": "omnigent — open-source AI agent framework",
+    "title": "omnigent",
+    "description": "An open-source AI agent framework and meta-harness",
+    "detailedDescription": "Fixed startup model overrides being dropped for own-login sessions, so the model you pick survives the replay path instead of silently reverting.",
+    "repo": "omnigent-ai/omnigent",
+    "stars": 11134,
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/omnigent-ai/omnigent"
+      }
+    ],
+    "pullRequests": [
+      {
+        "number": 6777,
+        "state": "open",
+        "title": "fix(pi): replay startup model override for own-login sessions",
+        "url": "https://github.com/omnigent-ai/omnigent/pull/6777"
+      }
+    ],
+    "techStack": {
+      "python": true,
+      "mcp": true
+    }
+  },
+  {
+    "imageSrc": "/projectimages/contrib-codexbar.avif",
+    "poster": true,
+    "imageAlt": "CodexBar — usage stats for Codex and Claude Code",
+    "title": "CodexBar",
+    "description": "Usage stats for OpenAI Codex and Claude Code, without logging in",
+    "detailedDescription": "Fixed GitHub Enterprise Copilot tracking so usage from enterprise hosts is attributed correctly instead of being dropped.",
+    "repo": "steipete/CodexBar",
+    "stars": 22903,
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/steipete/CodexBar"
+      }
+    ],
+    "pullRequests": [
+      {
+        "number": 3341,
+        "state": "merged",
+        "title": "Fix GitHub Enterprise Copilot tracking",
+        "url": "https://github.com/steipete/CodexBar/pull/3341"
+      }
+    ],
+    "techStack": {
+      "swift": true,
+      "macos": true
+    }
+  },
+  {
+    "imageSrc": "/projectimages/contrib-dsh-llm-github-copilot.avif",
+    "poster": true,
+    "imageAlt": "dsh-llm-github-copilot",
+    "title": "dsh-llm-github-copilot",
+    "description": "GitHub Copilot as an LLM provider for DeepSeek Harness",
+    "detailedDescription": "Added sign-in against GitHub Enterprise domains so Copilot can be used as a provider outside github.com.",
+    "repo": "lujianjun19/dsh-llm-github-copilot",
+    "stars": 12,
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/lujianjun19/dsh-llm-github-copilot"
+      }
+    ],
+    "pullRequests": [
+      {
+        "number": 25,
+        "state": "open",
+        "title": "feat: sign in against GitHub Enterprise domains",
+        "url": "https://github.com/lujianjun19/dsh-llm-github-copilot/pull/25"
+      }
+    ],
+    "techStack": {
+      "javascript": true,
+      "copilot": true
+    }
+  },
+  {
+    "imageSrc": "/projectimages/contrib-dsh-codex.avif",
+    "poster": true,
+    "imageAlt": "dsh-codex",
+    "title": "dsh-codex",
+    "description": "Use your ChatGPT subscription in DeepSeek Harness",
+    "detailedDescription": "Made the harness follow backend-authorised Luna Reserve fallbacks instead of failing when the primary model is unavailable.",
+    "repo": "Yan-Zero/dsh-codex",
+    "stars": 90,
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/Yan-Zero/dsh-codex"
+      }
+    ],
+    "pullRequests": [
+      {
+        "number": 16,
+        "state": "merged",
+        "title": "feat: follow backend-authorized Luna Reserve fallbacks",
+        "url": "https://github.com/Yan-Zero/dsh-codex/pull/16"
+      }
+    ],
+    "techStack": {
+      "typescript": true,
+      "openai": true
+    }
+  },
+  {
+    "imageSrc": "/projectimages/contrib-better-shot.avif",
+    "poster": true,
+    "imageAlt": "better-shot — open-source CleanShot alternative",
+    "title": "better-shot",
+    "description": "An open-source alternative to CleanShot X for macOS",
+    "detailedDescription": "Added WebP export and fixed the window capture hotkey so it fires reliably when a window is focused.",
+    "repo": "KartikLabhshetwar/better-shot",
+    "stars": 2419,
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/KartikLabhshetwar/better-shot"
+      }
+    ],
+    "pullRequests": [
+      {
+        "number": 88,
+        "state": "closed",
+        "title": "Add WebP export and fix window capture hotkey",
+        "url": "https://github.com/KartikLabhshetwar/better-shot/pull/88"
+      }
+    ],
+    "techStack": {
+      "swift": true,
+      "macos": true
+    }
+  },
+  {
+    "imageSrc": "/projectimages/contrib-battery.avif",
+    "poster": true,
+    "imageAlt": "battery — charge limiting for Apple silicon",
+    "title": "battery",
+    "description": "CLI and GUI for managing battery charging on Apple silicon",
+    "detailedDescription": "Added a percentage-only, menu-bar-only tray mode for people who want the charge limit visible without the rest of the interface.",
+    "repo": "actuallymentor/battery",
+    "stars": 7198,
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/actuallymentor/battery"
+      }
+    ],
+    "pullRequests": [
+      {
+        "number": 470,
+        "state": "open",
+        "title": "Add percentage-only, menu-bar-only tray mode",
+        "url": "https://github.com/actuallymentor/battery/pull/470"
+      }
+    ],
+    "techStack": {
+      "shell": true,
+      "macos": true
+    }
+  },
+  {
+    "imageSrc": "/projectimages/contrib-things3-cloud.avif",
+    "poster": true,
+    "imageAlt": "things3-cloud — CLI client for Things 3",
+    "title": "things3-cloud",
+    "description": "A CLI client for Things 3 backed by Things Cloud",
+    "detailedDescription": "Added an experimental Rust SDK API so the Things Cloud client can be used as a library rather than only as a binary.",
+    "repo": "evanpurkhiser/things3-cloud",
+    "stars": 42,
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/evanpurkhiser/things3-cloud"
+      }
+    ],
+    "pullRequests": [
+      {
+        "number": 2,
+        "state": "open",
+        "title": "Add experimental Rust SDK API",
+        "url": "https://github.com/evanpurkhiser/things3-cloud/pull/2"
+      }
+    ],
+    "techStack": {
+      "rust": true
+    }
+  },
+  {
+    "imageSrc": "/projectimages/contrib-swiftdown.avif",
+    "poster": true,
+    "imageAlt": "SwiftDown — markdown editor for SwiftUI",
+    "title": "SwiftDown",
+    "description": "A themable markdown editor component for SwiftUI apps",
+    "detailedDescription": "Added support for fully transparent colour options so the editor can sit on top of custom backgrounds.",
+    "repo": "qeude/SwiftDown",
+    "stars": 570,
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/qeude/SwiftDown"
+      }
+    ],
+    "pullRequests": [
+      {
+        "number": 39,
+        "state": "open",
+        "title": "Add support for fully transparent colour options",
+        "url": "https://github.com/qeude/SwiftDown/pull/39"
+      }
+    ],
+    "techStack": {
+      "swift": true,
+      "markdown": true
+    }
+  }
+]
