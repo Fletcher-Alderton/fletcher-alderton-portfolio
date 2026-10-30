@@ -20,9 +20,6 @@ module.exports = {
       },
       fontFamily: {
         'serif': ['Instrument Serif', 'serif'],
-        'inter': ['var(--font-inter)', 'sans-serif'],
-        'merriweather': ['var(--font-merriweather)', 'serif'],
-        'noto-serif': ['var(--font-noto-serif)', 'serif'],
       },
       spacing: {
         '18': '4.5rem',
