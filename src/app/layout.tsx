@@ -1,33 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter, Merriweather, Noto_Serif } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
-
-const merriweather = Merriweather({
-  variable: "--font-merriweather",
-  subsets: ["latin"],
-  weight: ['300', '400', '700'],
-});
-
-const notoSerif = Noto_Serif({
-  variable: "--font-noto-serif",
-  subsets: ["latin"],
-  weight: ['300', '400', '500', '600', '700'],
-});
+/**
+ * No `next/font/google` here on purpose.
+ *
+ * The site's display face (Instrument Serif) is loaded at runtime by the
+ * `@import` at the top of globals.css. The five Google fonts that used to be
+ * pulled in through `next/font/google` were never referenced by any component
+ * and only added build-time network fetches, which made `next build` fail on
+ * Vercel with `An error occurred in next/font`. The `--font-geist-sans` /
+ * `--font-geist-mono` tokens are now plain system stacks in globals.css.
+ */
 
 export const metadata: Metadata = {
   title: "Fletcher Alderton",
@@ -41,11 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${merriweather.variable} ${notoSerif.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }
