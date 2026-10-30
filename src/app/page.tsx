@@ -1,31 +1,18 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import { SparklesText } from "@/components/magicui/sparkles-text";
-import ProjectCard from "./components/ProjectCard";
-import {
-  Carousel,
-} from "@/components/ui/carousel";
-import type Slider from "react-slick";
+import { useState, useEffect, useCallback } from "react";
+import ProjectSection, { type CarouselCursorState } from "./components/ProjectSection";
 
-// Extend window interface to include carouselSlider
-declare global {
-  interface Window {
-    carouselSlider: Slider | null;
-  }
-}
- 
 import projects from "../../public/projects.json";
+import contributions from "../../public/contributions.json";
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [screenShape, setScreenShape] = useState<'phone' | 'square' | 'classic' | 'mac' | 'wide_short' | 'wide' | 'ultrawide' | 'unknown'>('wide'); // Default to wide for SSR
   const [mounted, setMounted] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [selectedIndex, setSelectedIndex] = useState(0);
   const [cursorIcon, setCursorIcon] = useState<'plus' | 'minus' | 'arrow-left' | 'arrow-right' | 'arrow-up' | null>(null);
-  const [centerProjectShowingDetails, setCenterProjectShowingDetails] = useState(false);
-  const [hoveredProjectIndex, setHoveredProjectIndex] = useState<number | null>(null);
+  const [carouselCursor, setCarouselCursor] = useState<CarouselCursorState | null>(null);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -35,9 +22,6 @@ export default function Home() {
   const [isNoteValid, setIsNoteValid] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [hasFinePointer, setHasFinePointer] = useState(true);
-
-  // Refs
-  const carouselContainerRef = useRef<HTMLDivElement>(null);
 
   const handleSubmit = useCallback(async () => {
     try {
@@ -112,77 +96,40 @@ export default function Home() {
     };
   }, [isFormValid, name, email, note, hasFinePointer, handleSubmit]); // Ensure handleSubmit has fresh state
 
-  // Update cursor icon reactively: show arrows based on carousel thirds, plus/minus for center card, arrow-up for form
+  // Update cursor icon reactively: arrows over the carousel edges, plus/minus
+  // over the centred card, arrow-up once the contact form is complete.
   useEffect(() => {
     if (isFormValid) {
       setCursorIcon('arrow-up');
       return;
     }
 
-    const container = carouselContainerRef.current;
-    if (container && hasFinePointer) {
-      const rect = container.getBoundingClientRect();
-      const { x, y } = mousePosition;
-      const inside = x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
-      if (inside) {
-        const thirdWidth = rect.width / 3;
-        const leftBoundary = rect.left + thirdWidth;
-        const rightBoundary = rect.right - thirdWidth;
-
-        if (x < leftBoundary) {
-          setCursorIcon('arrow-left');
-          return;
-        }
-        if (x > rightBoundary) {
-          setCursorIcon('arrow-right');
-          return;
-        }
-
-        // Center third: prefer plus/minus for centered card if hovered
-        if (hoveredProjectIndex !== null && hoveredProjectIndex === selectedIndex) {
-          const newIcon = centerProjectShowingDetails ? 'minus' : 'plus';
-          setCursorIcon(newIcon);
-        } else {
-          setCursorIcon(null);
-        }
-        return;
-      }
-    }
-
-    // Outside carousel: plus/minus for centered card hover, else nothing
-    if (hoveredProjectIndex !== null && hoveredProjectIndex === selectedIndex) {
-      setCursorIcon(centerProjectShowingDetails ? 'minus' : 'plus');
-    } else {
+    if (!carouselCursor) {
       setCursorIcon(null);
+      return;
     }
-  }, [isFormValid, hoveredProjectIndex, selectedIndex, centerProjectShowingDetails, mousePosition, hasFinePointer]);
+
+    const { zone, hoveredIndex, activeIndex, showingDetails } = carouselCursor;
+
+    if (zone === 'left') {
+      setCursorIcon('arrow-left');
+      return;
+    }
+    if (zone === 'right') {
+      setCursorIcon('arrow-right');
+      return;
+    }
+    if (hoveredIndex !== null && hoveredIndex === activeIndex) {
+      setCursorIcon(showingDetails ? 'minus' : 'plus');
+      return;
+    }
+
+    setCursorIcon(null);
+  }, [isFormValid, carouselCursor]);
 
   const handleMouseLeave = () => {
-    setHoveredProjectIndex(null);
+    setCarouselCursor(null);
   };
-
-  const handleProjectCardHover = (index: number) => {
-    setHoveredProjectIndex(index);
-  };
-
-  // Handle carousel slide changes
-  const handleSlideChange = useCallback((current: number, next: number) => {
-    setSelectedIndex(next);
-    setCenterProjectShowingDetails(false);
-  }, []);
-
-  // Handle center click for project cards
-  const handleCenterClick = useCallback((index: number) => {
-    // With React Slick, we don't need to manually scroll to slides
-    // The carousel handles navigation automatically
-    if (index !== selectedIndex) {
-      // This will be handled by the carousel's built-in navigation
-      const slider = window.carouselSlider;
-      if (slider && slider.slickGoTo) {
-        slider.slickGoTo(index);
-      }
-    }
-  }, [selectedIndex]);
 
   const updateScreenShape = () => {
     if (typeof window === 'undefined') return;
@@ -228,7 +175,7 @@ export default function Home() {
   if (formCompletionCount === 3) cursorBgClass = 'bg-orange-500 border-orange-400';
 
   return (
-    <div className="relative min-h-screen bg-neutral-50" style={hasFinePointer ? { cursor: 'none' } : undefined}>
+    <div className="relative min-h-screen bg-neutral-50 overflow-x-clip" style={hasFinePointer ? { cursor: 'none' } : undefined}>
       {/* Custom Cursor */}
       {mounted && hasFinePointer && (
         <div
@@ -365,6 +312,7 @@ export default function Home() {
           <div className="hidden md:flex space-x-6 lg:space-x-8">
             <a href="#info" className="text-xl lg:text-3xl font-serif text-black hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Info</a>
             <a href="#projects" className="text-xl lg:text-3xl font-serif text-black hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Projects</a>
+            <a href="#contributions" className="text-xl lg:text-3xl font-serif text-black hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Contributions</a>
             <a href="#contact" className="text-xl lg:text-3xl font-serif text-black hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Contact</a>
           </div>
         </nav>
@@ -375,6 +323,7 @@ export default function Home() {
             <div className="px-4 divide-y divide-black border-t border-black mx-4">
               <a href="#info" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity py-4" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Info</a>
               <a href="#projects" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity py-4" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Projects</a>
+              <a href="#contributions" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity py-4" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Contributions</a>
               <a href="#contact" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity py-4" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Contact</a>
             </div>
           </div>
@@ -424,126 +373,22 @@ export default function Home() {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="relative z-10 min-h-screen flex flex-col justify-center py-16 md:py-24">
-        <div className="max-w-7xl mx-auto w-full px-2 ml-5 sm:px-4 md:px-6 lg:px-8">
-          <div className="grid grid-cols-[1fr_1fr] items-center mb-3 md:mb-4">
-            <h2 className={`font-serif italic text-black transition-all duration-1000 ease-in-out ${
-              screenShape === 'classic' ? 'text-3xl sm:text-4xl md:text-5xl' : 'text-3xl sm:text-4xl md:text-5xl'
-            }`}>My Projects</h2>
-            
-            {/* Hint text with sparkles - mobile only */}
-            <div className="md:hidden text-center">
-              <SparklesText 
-                className="text-md lg:text-lg text-black font-thin whitespace-nowrap"
-                colors={{ first: "#B2FF00", second: "#FF5900" }}
-                sparklesCount={5}
-              >
-                Click on any project <br />
-                for more details
-              </SparklesText>
-            </div>
-          </div>
-          <div className="w-40 sm:w-44 md:w-52 h-px bg-black mb-8 md:mb-12 lg:mb-16"></div>
-        </div>
-        
-        {/* Carousel Container */}
-        <div ref={carouselContainerRef} className="carousel-container w-full relative px-4 sm:px-6 md:px-8 lg:px-0">
-          <Carousel
-            setApi={(api) => {
-              // Store the slider API for navigation
-              window.carouselSlider = api;
-            }}
-            opts={{
-              beforeChange: handleSlideChange,
-            }}
-            className="w-full"
-          >
-            {projects.map((project, index) => (
-              <ProjectCard
-                key={index}
-                {...project}
-                isCentered={index === selectedIndex}
-                onCenterClick={() => handleCenterClick(index)}
-                onMouseEnter={() => handleProjectCardHover(index)}
-                onMouseLeave={handleMouseLeave}
-                                  onShowDetailsChange={(showingDetails) => {
-                    if(index !== selectedIndex) return; // ignore non-centered cards
-                    // Debounce the state update to prevent rapid true/false switching
-                    setTimeout(() => {
-                      setCenterProjectShowingDetails(showingDetails);
-                    }, 10);
-                  }}
-              />
-            ))}
-          </Carousel>
+      <ProjectSection
+        id="projects"
+        title="My Projects"
+        items={projects}
+        hint="Tap a project for details"
+        onCursorStateChange={setCarouselCursor}
+      />
 
-          {/* Click overlay for carousel navigation - desktop only */}
-          {hasFinePointer && (
-            <div className="pointer-events-none absolute inset-0 z-40" aria-hidden="true" role="presentation">
-              {/* Left third clickable zone */}
-              <div
-                className="absolute inset-y-0 left-0 pointer-events-auto"
-                style={{ width: '33.3333%' }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // Use React Slick's slickPrev method via window reference
-                  const slider = window.carouselSlider;
-                  if (slider && slider.slickPrev) {
-                    slider.slickPrev();
-                  }
-                }}
-                aria-label="Previous slide"
-              />
-              {/* Center third (pass-through) */}
-              <div
-                className="absolute inset-y-0"
-                style={{ left: '33.3333%', width: '33.3333%' }}
-              />
-              {/* Right third clickable zone */}
-              <div
-                className="absolute inset-y-0 right-0 pointer-events-auto"
-                style={{ width: '33.3333%' }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // Use React Slick's slickNext method via window reference
-                  const slider = window.carouselSlider;
-                  if (slider && slider.slickNext) {
-                    slider.slickNext();
-                  }
-                }}
-                aria-label="Next slide"
-              />
-            </div>
-          )}
-        </div>
-        
-        {/* Position Indicators - Mobile Only */}
-        <div className="flex justify-center mt-6 md:hidden">
-          <div className="flex gap-1">
-            {projects.map((_, index) => {
-              // Cycle through the three colors: FF5900 (orange), 008CFF (blue), B2FF00 (green)
-              const colors = ['#FF5900', '#008CFF', '#B2FF00'];
-              const colorIndex = index % colors.length;
-              const isActive = index === selectedIndex;
-              
-              return (
-                <span
-                  key={index}
-                  className="inline-block rounded-full transition-all duration-200"
-                  style={{
-                    width: '10px',
-                    height: '10px',
-                    cursor: 'none',
-                    backgroundColor: isActive ? colors[colorIndex] : colors[colorIndex] + '40', // 40 = 25% opacity for inactive
-                    border: isActive ? `2px solid ${colors[colorIndex]}` : 'none'
-                  }}
-                  onMouseLeave={handleMouseLeave}
-                />
-              );
-            })}
-          </div>
-        </div>
-      </section>
+      {/* Contributed projects */}
+      <ProjectSection
+        id="contributions"
+        title="Projects I've Contributed To"
+        items={contributions}
+        hint="Tap a project for details"
+        onCursorStateChange={setCarouselCursor}
+      />
 
       {/* Contact Section */}
       <section id="contact" className={`relative z-10 px-4 sm:px-6 lg:px-8 flex items-center transition-all duration-1000 ease-in-out ${
@@ -560,7 +405,7 @@ export default function Home() {
           
           <form className="relative">
             {/* Your Name Input - nearly center but slightly to the left */}
-            <div className="w-full md:absolute md:left-1/2 md:transform md:-translate-x-1/2 md:translate-x-[-80px] md:w-80 mb-12">
+            <div className="w-full lg:absolute lg:left-1/2 lg:transform lg:translate-x-[calc(-50%-80px)] lg:w-80 mb-12">
               <label 
                 className={`block font-serif text-black mb-4 transition-all duration-1000 ease-in-out ${
                   screenShape === 'classic' ? 'text-2xl md:text-3xl' : 'text-2xl md:text-3xl'
@@ -581,10 +426,10 @@ export default function Home() {
             </div>
             
             {/* Email Input - off-centered to the right */}
-            <div className={`w-full mb-12 md:absolute md:top-48 md:left-1/2 md:transform md:-translate-x-1/2 md:w-96 ${
-              screenShape === 'mac' ? 'md:translate-x-[70px]' :
-              screenShape === 'classic' ? 'md:translate-x-[-300px]' :
-              'md:translate-x-[120px]'
+            <div className={`w-full mb-12 lg:absolute lg:top-48 lg:left-1/2 lg:transform lg:w-96 ${
+              screenShape === 'mac' ? 'lg:translate-x-[calc(-50%+70px)]' :
+              screenShape === 'classic' ? 'lg:translate-x-[calc(-50%-300px)]' :
+              'lg:translate-x-[calc(-50%+120px)]'
             }`}>
               <label 
                 className={`block font-serif text-black mb-4 transition-all duration-1000 ease-in-out ${
@@ -606,8 +451,8 @@ export default function Home() {
             </div>
             
             {/* A little Note - off-center to the left, further than Your Name */}
-            <div className={`w-full md:absolute md:top-96 md:left-1/2 md:transform md:-translate-x-1/2 transition-all duration-1000 ease-in-out ${
-              screenShape === 'classic' ? 'md:translate-x-[-200px] md:w-[400px]' : 'md:translate-x-[-200px] md:w-[500px]'
+            <div className={`w-full lg:absolute lg:top-96 lg:left-1/2 lg:transform lg:translate-x-[calc(-50%-200px)] transition-all duration-1000 ease-in-out ${
+              screenShape === 'classic' ? 'lg:w-[400px]' : 'lg:w-[500px]'
             }`}>
               <label 
                 className={`block font-serif text-black mb-4 transition-all duration-1000 ease-in-out ${
@@ -643,7 +488,7 @@ export default function Home() {
             </div>
             
             {/* Spacer to ensure proper section height */}
-            <div className="h-[200px] md:h-[600px]"></div>
+            <div className="h-[200px] lg:h-[600px]"></div>
           </form>
         </div>
       </section>

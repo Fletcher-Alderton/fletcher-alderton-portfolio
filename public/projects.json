@@ -1,67 +1,167 @@
 [
-{
-    "imageSrc": "/projectimages/floating-notes.avif",
-    "imageAlt": "Floating Notes App",
-    "title": "Floating Notes",
-    "description": "A simple note taking app",
-    "detailedDescription": "I made Floating Notes in SwiftUI as an alternative to raycast notes but free and open source as I thought $15 was a bit much for a note taking app",
-    "links": [
-    { "type": "blog", "url": "#" },
-    { "type": "github", "url": "#" }
-    ],
-    "techStack": {
-        "swift": true
-    }
-},
-{
-    "imageSrc": "/projectimages/qtm.avif",
-    "imageAlt": "Quotes that Matter App",
-    "title": "Quotes that Matter",
-    "description": "Giving great quotes the attention they deserve",
-    "detailedDescription": "I made Quotes that Matter as a way to showcase meaningful quotes in an elegant interface. I felt like there was a lack of good quote apps out there and I wanted to make one that was easy to use and looked good.",
-    "links": [
-    { "type": "blog", "url": "#" },
-    { "type": "github", "url": "#" }
-    ],
-    "techStack": {
-        "nextjs": true,
-        "react": true,
-        "typescript": true,
-        "convex": true,
-        "vercel": true
-    }
-},
-{
+  {
     "imageSrc": "/projectimages/just-save-it.avif",
-    "imageAlt": "Just $ave It App",
+    "imageAlt": "Just $ave It compound interest calculator",
     "title": "Just $ave It",
     "description": "See what you could be worth if you just saved it",
-    "detailedDescription": "I created Just $ave It as a way to visualize the power of saving money over time with compound interest calculations. ",
+    "detailedDescription": "A compound interest visualiser built to show what small, boring, consistent deposits turn into over time. Built with Next.js and Convex, deployed on Vercel.",
     "links": [
-    { "type": "blog", "url": "#" },
-    { "type": "github", "url": "#" }
+      {
+        "type": "live",
+        "url": "https://justsaveit.fletcheralderton.com"
+      }
     ],
     "techStack": {
-        "nextjs": true,
-        "react": true,
-        "typescript": true,
-        "convex": true,
-        "vercel": true
+      "nextjs": true,
+      "react": true,
+      "typescript": true,
+      "convex": true,
+      "vercel": true
     }
-},
-{
+  },
+  {
+    "imageSrc": "/projectimages/qtm.avif",
+    "imageAlt": "Quotes that Matter app",
+    "title": "Quotes that Matter",
+    "description": "Giving great quotes the attention they deserve",
+    "detailedDescription": "A quote app built around the idea that the right quote at the right time can change everything. Elegant, distraction-free reading with a curated collection instead of an endless feed.",
+    "links": [],
+    "techStack": {
+      "nextjs": true,
+      "react": true,
+      "typescript": true,
+      "convex": true,
+      "vercel": true
+    }
+  },
+  {
+    "imageSrc": "/projectimages/floating-notes.avif",
+    "imageAlt": "Floating Notes macOS app",
+    "title": "Floating Notes",
+    "description": "Notes that float on your desktop",
+    "detailedDescription": "A free, open source alternative to paid menu bar note apps. Transparent always-on-top windows, multi-space support, global shortcuts and URL scheme automation, written in SwiftUI.",
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/Fletcher-Alderton/FloatingNotes"
+      }
+    ],
+    "techStack": {
+      "swift": true,
+      "macos": true
+    }
+  },
+  {
     "imageSrc": "/projectimages/spellcheck.avif",
-    "imageAlt": "Spellcheck App",
+    "imageAlt": "Spellcheck macOS app",
     "title": "Spellcheck",
-    "description": "A simple spellcheck app",
-    "detailedDescription": "I made Spellcheck as a simple spellcheck app that uses the OpenAI API to check the spelling of a word. I wanted to make a simple app that was easy to use and looked good.",
+    "description": "AI spellchecking in a floating window",
+    "detailedDescription": "Select text anywhere on your Mac, hit the shortcut, and get a corrected version in a transparent floating window. Auto-copies the selection, diffs the result and highlights what changed.",
+    "links": [],
+    "techStack": {
+      "swift": true,
+      "openai": true,
+      "macos": true
+    }
+  },
+  {
+    "imageSrc": "/projectimages/knot.avif",
+    "poster": true,
+    "imageAlt": "Knot local-first Markdown Kanban",
+    "title": "Knot",
+    "description": "Local-first Markdown Kanban with peer-to-peer sync",
+    "detailedDescription": "Boards stay as ordinary Markdown files with YAML frontmatter. Cards, immutable revisions and deterministic three-way merges work offline, while Iroh handles peer-to-peer sync between devices. One Tauri app targeting macOS and iOS.",
     "links": [
-    { "type": "blog", "url": "#" },
-    { "type": "github", "url": "#" }
+      {
+        "type": "github",
+        "url": "https://github.com/Fletcher-Alderton/knot"
+      }
     ],
     "techStack": {
-        "swift": true,
-        "openai": true
+      "rust": true,
+      "tauri": true,
+      "typescript": true,
+      "markdown": true
     }
-}
+  },
+  {
+    "imageSrc": "/projectimages/railradar.avif",
+    "poster": true,
+    "imageAlt": "RailRadar ticket inspector tracking",
+    "title": "RailRadar",
+    "description": "Track ticket inspectors across Melbourne's rail network",
+    "detailedDescription": "A crowdsourced map of where ticket inspectors are on the Melbourne metro network, so you know what you are walking into before you tap on. Built with Next.js and deployed on Vercel.",
+    "links": [
+      {
+        "type": "live",
+        "url": "https://railradar.fletcheralderton.com"
+      }
+    ],
+    "techStack": {
+      "typescript": true,
+      "nextjs": true,
+      "vercel": true
+    }
+  },
+  {
+    "imageSrc": "/projectimages/matterstats.avif",
+    "poster": true,
+    "imageAlt": "Matterstats reading analytics dashboard",
+    "title": "Matterstats",
+    "description": "A reading analytics dashboard for Matter",
+    "detailedDescription": "Turns your saved Matter reading list into something you can actually reason about: reading streaks, topic breakdowns, time-to-finish estimates and a look back at everything you have already read.",
+    "links": [
+      {
+        "type": "live",
+        "url": "https://matterstats.vercel.app"
+      },
+      {
+        "type": "github",
+        "url": "https://github.com/Fletcher-Alderton/matterstats"
+      }
+    ],
+    "techStack": {
+      "typescript": true,
+      "nextjs": true,
+      "vercel": true
+    }
+  },
+  {
+    "imageSrc": "/projectimages/degoog-cli.avif",
+    "poster": true,
+    "imageAlt": "degoog-cli terminal and MCP server",
+    "title": "degoog-cli",
+    "description": "A local CLI and MCP server for self-hosted search",
+    "detailedDescription": "A Rust rewrite of the official Degoog MCP sidecar. Search stays on your server, but scraping, article extraction, chunking and evidence packing all happen locally in a process the MCP client starts and stops. No extra port, container or token to secure.",
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/Fletcher-Alderton/degoog-cli"
+      }
+    ],
+    "techStack": {
+      "rust": true,
+      "mcp": true,
+      "markdown": true
+    }
+  },
+  {
+    "imageSrc": "/projectimages/obsidian-opener.avif",
+    "poster": true,
+    "imageAlt": "Obsidian Opener menu bar app",
+    "title": "Obsidian Opener",
+    "description": "Make .md files open in Obsidian, not Xcode",
+    "detailedDescription": "A tiny menu bar app that registers itself as the handler for Markdown files so double-clicking a .md opens your vault instead of a text editor you never wanted. Set it once, forget it exists.",
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/Fletcher-Alderton/ObsidianOpener"
+      }
+    ],
+    "techStack": {
+      "swift": true,
+      "obsidian": true,
+      "macos": true
+    }
+  }
 ]
