@@ -20,6 +20,8 @@ type CarouselProps = {
    */
   slidesToShow?: number
   centerMode?: boolean
+  /** Width of the peek of the neighbouring slides (react-slick centerPadding). */
+  centerPadding?: string
   setApi?: (api: Slider | null) => void
   className?: string
   children: React.ReactNode
@@ -29,6 +31,7 @@ function Carousel({
   opts,
   slidesToShow = 3,
   centerMode = true,
+  centerPadding = "0px",
   setApi,
   className,
   children,
@@ -44,7 +47,7 @@ function Carousel({
     slidesToShow,
     slidesToScroll: 1,
     centerMode,
-    centerPadding: "0px",
+    centerPadding,
     swipeToSlide: true,
     touchThreshold: 12,
     accessibility: true,

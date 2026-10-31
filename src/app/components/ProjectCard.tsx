@@ -1,5 +1,4 @@
 import Image from "next/image";
-import BlurEffect from "react-progressive-blur";
 import { useState, useEffect } from "react";
 import { TechIcon, techLabel } from "./tech-icons";
 
@@ -23,11 +22,6 @@ export interface ProjectCardProps {
   detailedDescription: string;
   links: readonly ExternalLink[];
   techStack: { [key: string]: boolean | undefined };
-  /**
-   * Generated poster artwork: it already carries its own title, tagline and
-   * tech chips, so the card must not paint the blur + text overlay on top.
-   */
-  poster?: boolean;
   /** Present on the "contributed to" cards. */
   repo?: string;
   stars?: number;
@@ -70,7 +64,6 @@ export default function ProjectCard({
   detailedDescription,
   links,
   techStack,
-  poster,
   repo,
   stars,
   pullRequests,
@@ -111,14 +104,14 @@ export default function ProjectCard({
   if (showDetails) {
     return (
       <div
-        className={`relative group mx-auto w-full max-w-[34rem] lg:max-w-none transition-transform duration-300 ease-in-out ${
+        className={`relative group w-full transition-transform duration-300 ease-in-out ${
           isCentered ? "transform scale-100" : "transform scale-90"
         }`}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       >
         <div
-          className="aspect-[4/5] sm:aspect-square relative shadow-lg cursor-pointer"
+          className="aspect-square relative shadow-lg cursor-pointer"
           onClick={handleClick}
           style={{ cursor: "none" }}
         >
@@ -134,10 +127,10 @@ export default function ProjectCard({
           <div className="absolute inset-0 bg-white/40" />
 
           {/* Full-card Details Panel - Minimal brutalist */}
-          <div className="absolute inset-0 z-20 bg-neutral-50 border border-black p-4 sm:p-5 md:p-6 flex flex-col overflow-y-auto overscroll-contain">
+          <div className="absolute inset-0 z-20 bg-neutral-50 border border-black p-3 sm:p-5 md:p-6 flex flex-col overflow-y-auto overscroll-contain">
             {/* Title + top-right links */}
             <div className="flex items-start justify-between gap-3">
-              <h3 className="text-xl sm:text-2xl md:text-3xl font-serif text-black italic leading-tight">
+              <h3 className="text-lg sm:text-2xl md:text-3xl font-serif text-black italic leading-tight">
                 {title}
               </h3>
               <div className="flex flex-col items-end gap-1 shrink-0">
@@ -158,21 +151,21 @@ export default function ProjectCard({
               </div>
             </div>
 
-            <div className="h-px bg-black my-2.5 shrink-0"></div>
+            <div className="h-px bg-black my-2 shrink-0"></div>
 
             {/* Description */}
-            <p className="text-sm sm:text-base md:text-lg font-serif text-black leading-relaxed">
+            <p className="text-[13px] sm:text-base md:text-lg font-serif text-black leading-tight sm:leading-relaxed">
               {detailedDescription}
             </p>
 
             {/* Pull requests (contributed cards) */}
             {pullRequests && pullRequests.length > 0 && (
-              <div className="mt-3 shrink-0">
-                <h4 className="font-serif text-base md:text-lg text-black italic">
+              <div className="mt-2 sm:mt-3 shrink-0">
+                <h4 className="font-serif text-sm sm:text-base md:text-lg text-black italic">
                   {pullRequests.length > 1 ? "My pull requests" : "My pull request"}
                 </h4>
                 <div className="h-px bg-black mb-2"></div>
-                <ul className="space-y-2">
+                <ul className="space-y-1">
                   {pullRequests.map((pr) => (
                     <li key={pr.number}>
                       <a
@@ -195,7 +188,7 @@ export default function ProjectCard({
                             {pr.state}
                           </span>
                         </span>
-                        <span className="block font-serif text-xs sm:text-sm text-black/80 leading-snug mt-0.5">
+                        <span className="block font-serif text-[11px] sm:text-sm text-black/80 leading-snug mt-0.5">
                           {pr.title}
                         </span>
                       </a>
@@ -207,7 +200,7 @@ export default function ProjectCard({
 
             {/* Tech stack */}
             {visibleTech.length > 0 && (
-              <div className="mt-auto pt-3 shrink-0">
+              <div className="mt-auto pt-2 sm:pt-3 shrink-0">
                 <h4 className="font-serif text-base md:text-lg text-black italic">
                   Tech stack
                 </h4>
@@ -216,11 +209,11 @@ export default function ProjectCard({
                   {visibleTech.map((tech) => (
                     <div
                       key={tech}
-                      className="inline-flex items-center gap-1.5 border border-black px-1.5 py-1 bg-white"
+                      className="inline-flex items-center gap-1.5 border border-black px-1.5 py-0.5 sm:py-1 bg-white"
                       title={techLabel(tech)}
                     >
                       <TechIcon type={tech} size={18} />
-                      <span className="text-[11px] sm:text-xs font-serif text-black">
+                      <span className="text-[10px] sm:text-xs font-serif text-black">
                         {techLabel(tech)}
                       </span>
                     </div>
@@ -236,14 +229,14 @@ export default function ProjectCard({
 
   return (
     <div
-      className={`relative group mx-auto w-full max-w-[34rem] lg:max-w-none transition-transform duration-300 ease-in-out ${
+      className={`relative group w-full transition-transform duration-300 ease-in-out ${
         isCentered ? "transform scale-100" : "transform scale-90"
       }`}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
       <div
-        className="bg-gray-200 aspect-[4/5] sm:aspect-square relative shadow-lg cursor-pointer overflow-hidden"
+        className="bg-neutral-900 aspect-square relative shadow-lg cursor-pointer overflow-hidden"
         onClick={handleClick}
         style={{ cursor: "none" }}
       >
@@ -255,32 +248,25 @@ export default function ProjectCard({
           className="w-full h-full object-cover"
         />
 
-        {!poster && (
-          <>
-            {/* Progressive Blur Effect */}
-            <BlurEffect position="bottom" intensity={120} className="h-40" />
-
-            {/* Text Content - separate from blur layers */}
-            <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 z-20">
-              <div className="flex justify-between items-end gap-2">
-                <div className="min-w-0">
-                  <h3 className="text-xl sm:text-2xl font-serif text-black mb-1 md:mb-2 leading-tight">
-                    {title}
-                  </h3>
-                  <p className="text-sm sm:text-lg font-serif text-black leading-snug">
-                    {description}
-                  </p>
-                  {repo && (
-                    <p className="mt-1 font-sans text-[11px] tracking-wide text-black/60 truncate">
-                      {repo}
-                      {starLabel ? ` · ★ ${starLabel}` : ""}
-                    </p>
-                  )}
-                </div>
-              </div>
+        {/* Label sits on the dark scrim baked into the artwork */}
+        <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 z-20">
+          <div className="flex justify-between items-end gap-2">
+            <div className="min-w-0">
+              <h3 className="text-lg sm:text-2xl font-serif text-white mb-1 md:mb-2 leading-tight">
+                {title}
+              </h3>
+              <p className="text-xs sm:text-base font-serif text-white/85 leading-snug line-clamp-3">
+                {description}
+              </p>
+              {repo && (
+                <p className="mt-1 font-sans text-[11px] tracking-wide text-white/60 truncate">
+                  {repo}
+                  {starLabel ? ` · ★ ${starLabel}` : ""}
+                </p>
+              )}
             </div>
-          </>
-        )}
+          </div>
+        </div>
       </div>
     </div>
   );

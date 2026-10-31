@@ -1,7 +1,6 @@
 [
   {
     "imageSrc": "/projectimages/contrib-search.avif",
-    "poster": true,
     "imageAlt": "Search — a small, fast WebKit browser for macOS",
     "title": "Search",
     "description": "A small, fast WebKit browser for macOS",
@@ -29,7 +28,6 @@
   },
   {
     "imageSrc": "/projectimages/contrib-kage.avif",
-    "poster": true,
     "imageAlt": "kage — a hackable coding agent for your terminal",
     "title": "kage",
     "description": "A fast, hackable coding agent for your terminal, editor and browser",
@@ -56,7 +54,6 @@
   },
   {
     "imageSrc": "/projectimages/contrib-routectl.avif",
-    "poster": true,
     "imageAlt": "routectl — a local LLM router",
     "title": "routectl",
     "description": "A local LLM router with OpenAI and Anthropic format translation",
@@ -89,7 +86,6 @@
   },
   {
     "imageSrc": "/projectimages/contrib-stasis.avif",
-    "poster": true,
     "imageAlt": "Stasis — a smarter MacBook battery icon",
     "title": "Stasis",
     "description": "A smarter battery icon for MacBook",
@@ -117,7 +113,6 @@
   },
   {
     "imageSrc": "/projectimages/contrib-macmonitor.avif",
-    "poster": true,
     "imageAlt": "MacMonitor — Apple Silicon system monitor",
     "title": "MacMonitor",
     "description": "Real-time Apple Silicon system monitor for the menu bar",
@@ -151,7 +146,6 @@
   },
   {
     "imageSrc": "/projectimages/contrib-homebrew-cask.avif",
-    "poster": true,
     "imageAlt": "Homebrew Cask",
     "title": "Homebrew Cask",
     "description": "The default casks for the package manager for everywhere",
@@ -179,7 +173,6 @@
   },
   {
     "imageSrc": "/projectimages/contrib-splitwg.avif",
-    "poster": true,
     "imageAlt": "SplitWG — WireGuard split tunnelling for macOS",
     "title": "SplitWG",
     "description": "A native macOS menu bar app for WireGuard",
@@ -207,7 +200,6 @@
   },
   {
     "imageSrc": "/projectimages/contrib-omniwm.avif",
-    "poster": true,
     "imageAlt": "OmniWM — tiling window manager for macOS",
     "title": "OmniWM",
     "description": "Niri and Hyprland inspired tiling window manager for macOS",
@@ -235,7 +227,6 @@
   },
   {
     "imageSrc": "/projectimages/contrib-omnigent.avif",
-    "poster": true,
     "imageAlt": "omnigent — open-source AI agent framework",
     "title": "omnigent",
     "description": "An open-source AI agent framework and meta-harness",
@@ -263,7 +254,6 @@
   },
   {
     "imageSrc": "/projectimages/contrib-codexbar.avif",
-    "poster": true,
     "imageAlt": "CodexBar — usage stats for Codex and Claude Code",
     "title": "CodexBar",
     "description": "Usage stats for OpenAI Codex and Claude Code, without logging in",
@@ -291,7 +281,6 @@
   },
   {
     "imageSrc": "/projectimages/contrib-dsh-llm-github-copilot.avif",
-    "poster": true,
     "imageAlt": "dsh-llm-github-copilot",
     "title": "dsh-llm-github-copilot",
     "description": "GitHub Copilot as an LLM provider for DeepSeek Harness",
@@ -319,7 +308,6 @@
   },
   {
     "imageSrc": "/projectimages/contrib-dsh-codex.avif",
-    "poster": true,
     "imageAlt": "dsh-codex",
     "title": "dsh-codex",
     "description": "Use your ChatGPT subscription in DeepSeek Harness",
@@ -347,7 +335,6 @@
   },
   {
     "imageSrc": "/projectimages/contrib-better-shot.avif",
-    "poster": true,
     "imageAlt": "better-shot — open-source CleanShot alternative",
     "title": "better-shot",
     "description": "An open-source alternative to CleanShot X for macOS",
@@ -375,7 +362,6 @@
   },
   {
     "imageSrc": "/projectimages/contrib-battery.avif",
-    "poster": true,
     "imageAlt": "battery — charge limiting for Apple silicon",
     "title": "battery",
     "description": "CLI and GUI for managing battery charging on Apple silicon",
@@ -403,7 +389,6 @@
   },
   {
     "imageSrc": "/projectimages/contrib-things3-cloud.avif",
-    "poster": true,
     "imageAlt": "things3-cloud — CLI client for Things 3",
     "title": "things3-cloud",
     "description": "A CLI client for Things 3 backed by Things Cloud",
@@ -430,7 +415,6 @@
   },
   {
     "imageSrc": "/projectimages/contrib-swiftdown.avif",
-    "poster": true,
     "imageAlt": "SwiftDown — markdown editor for SwiftUI",
     "title": "SwiftDown",
     "description": "A themable markdown editor component for SwiftUI apps",

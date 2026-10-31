@@ -14,7 +14,6 @@
         "next": "^15.5.28",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
-        "react-progressive-blur": "^1.0.5",
         "react-slick": "^0.31.0",
         "resend": "^4.6.0",
         "slick-carousel": "^1.8.1",
@@ -742,8 +741,6 @@
     "react-dom": ["react-dom@19.1.0", "", { "dependencies": { "scheduler": "^0.26.0" }, "peerDependencies": { "react": "^19.1.0" } }, "sha512-Xs1hdnE+DyKgeHJeJznQmYMIBG3TKIHJJT95Q58nHLSrElKlGQqDTR2HQ9fx5CN/Gk6Vh/kupBTDLU11/nDk/g=="],
 
     "react-is": ["react-is@16.13.1", "", {}, "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ=="],
-
-    "react-progressive-blur": ["react-progressive-blur@1.0.5", "", { "dependencies": { "react-progressive-blur": "^1.0.0" }, "peerDependencies": { "react": ">=17.0.0", "react-dom": ">=17.0.0" } }, "sha512-8piH02pgiP11TUMfPRUEVG+oawShFjZvn3rgZYsxK0r5eT0iNuSWkiUqd0yae/c1Nm6FXhWELlXqpUc+Zkvaug=="],
 
     "react-promise-suspense": ["react-promise-suspense@0.3.4", "", { "dependencies": { "fast-deep-equal": "^2.0.1" } }, "sha512-I42jl7L3Ze6kZaq+7zXWSunBa3b1on5yfvUW6Eo/3fFOj6dZ5Bqmcd264nJbTK/gn1HjjILAjSwnZbV4RpSaNQ=="],
 
