@@ -22,6 +22,12 @@ export interface ProjectCardProps {
   detailedDescription: string;
   links: readonly ExternalLink[];
   techStack: { [key: string]: boolean | undefined };
+  /**
+   * The artwork already is the whole card (a full-bleed product preview with
+   * no wallpaper behind it), so the label needs dark text and the card must not
+   * paint a dark backing behind the image.
+   */
+  fill?: boolean;
   /** Present on the "contributed to" cards. */
   repo?: string;
   stars?: number;
@@ -64,6 +70,7 @@ export default function ProjectCard({
   detailedDescription,
   links,
   techStack,
+  fill,
   repo,
   stars,
   pullRequests,
@@ -236,7 +243,9 @@ export default function ProjectCard({
       onMouseLeave={onMouseLeave}
     >
       <div
-        className="bg-neutral-900 aspect-square relative shadow-lg cursor-pointer overflow-hidden"
+        className={`${
+          fill ? "bg-white" : "bg-neutral-900"
+        } aspect-square relative shadow-lg cursor-pointer overflow-hidden`}
         onClick={handleClick}
         style={{ cursor: "none" }}
       >
@@ -252,14 +261,26 @@ export default function ProjectCard({
         <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 z-20">
           <div className="flex justify-between items-end gap-2">
             <div className="min-w-0">
-              <h3 className="text-lg sm:text-2xl font-serif text-white mb-1 md:mb-2 leading-tight">
+              <h3
+                className={`text-lg sm:text-2xl font-serif mb-1 md:mb-2 leading-tight ${
+                  fill ? "text-black" : "text-white"
+                }`}
+              >
                 {title}
               </h3>
-              <p className="text-xs sm:text-base font-serif text-white/85 leading-snug line-clamp-3">
+              <p
+                className={`text-xs sm:text-base font-serif leading-snug line-clamp-3 ${
+                  fill ? "text-black/75" : "text-white/85"
+                }`}
+              >
                 {description}
               </p>
               {repo && (
-                <p className="mt-1 font-sans text-[11px] tracking-wide text-white/60 truncate">
+                <p
+                  className={`mt-1 font-sans text-[11px] tracking-wide truncate ${
+                    fill ? "text-black/55" : "text-white/60"
+                  }`}
+                >
                   {repo}
                   {starLabel ? ` · ★ ${starLabel}` : ""}
                 </p>
