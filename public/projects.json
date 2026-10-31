@@ -2,6 +2,7 @@
   {
     "imageSrc": "/projectimages/just-save-it.avif",
     "imageAlt": "Just $ave It compound interest calculator",
+    "fill": true,
     "title": "Just $ave It",
     "description": "See what you could be worth if you just saved it",
     "detailedDescription": "A compound interest visualiser built to show what small, boring, consistent deposits turn into over time. Built with Next.js and Convex, deployed on Vercel.",
@@ -22,6 +23,7 @@
   {
     "imageSrc": "/projectimages/qtm.avif",
     "imageAlt": "Quotes that Matter app",
+    "fill": true,
     "title": "Quotes that Matter",
     "description": "Giving great quotes the attention they deserve",
     "detailedDescription": "A quote app built around the idea that the right quote at the right time can change everything. Elegant, distraction-free reading with a curated collection instead of an endless feed.",
