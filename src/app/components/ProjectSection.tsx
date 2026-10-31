@@ -170,7 +170,11 @@ export default function ProjectSection({
   );
 
   const slidesToShow = SLIDES_BY_LAYOUT[layout];
-  const centerMode = layout !== "mobile";
+  // Phones keep the single-card view but centre it with a sliver of the
+  // neighbouring cards showing, so it reads as a carousel you can swipe.
+  const centerMode = true;
+  const centerPadding =
+    layout === "mobile" ? "7%" : layout === "tablet" ? "12%" : "0px";
 
   const dots = useMemo(
     () =>
@@ -223,6 +227,7 @@ export default function ProjectSection({
           }}
           slidesToShow={slidesToShow}
           centerMode={centerMode}
+          centerPadding={centerPadding}
           opts={{
             beforeChange: handleSlideChange,
           }}

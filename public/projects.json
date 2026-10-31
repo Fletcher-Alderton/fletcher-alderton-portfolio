@@ -66,7 +66,6 @@
   },
   {
     "imageSrc": "/projectimages/knot.avif",
-    "poster": true,
     "imageAlt": "Knot local-first Markdown Kanban",
     "title": "Knot",
     "description": "Local-first Markdown Kanban with peer-to-peer sync",
@@ -86,7 +85,6 @@
   },
   {
     "imageSrc": "/projectimages/railradar.avif",
-    "poster": true,
     "imageAlt": "RailRadar ticket inspector tracking",
     "title": "RailRadar",
     "description": "Track ticket inspectors across Melbourne's rail network",
@@ -105,7 +103,6 @@
   },
   {
     "imageSrc": "/projectimages/matterstats.avif",
-    "poster": true,
     "imageAlt": "Matterstats reading analytics dashboard",
     "title": "Matterstats",
     "description": "A reading analytics dashboard for Matter",
@@ -128,7 +125,6 @@
   },
   {
     "imageSrc": "/projectimages/degoog-cli.avif",
-    "poster": true,
     "imageAlt": "degoog-cli terminal and MCP server",
     "title": "degoog-cli",
     "description": "A local CLI and MCP server for self-hosted search",
@@ -147,7 +143,6 @@
   },
   {
     "imageSrc": "/projectimages/obsidian-opener.avif",
-    "poster": true,
     "imageAlt": "Obsidian Opener menu bar app",
     "title": "Obsidian Opener",
     "description": "Make .md files open in Obsidian, not Xcode",
