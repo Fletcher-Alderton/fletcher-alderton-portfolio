@@ -145,33 +145,6 @@
     }
   },
   {
-    "imageSrc": "/projectimages/contrib-homebrew-cask.avif",
-    "imageAlt": "Homebrew Cask",
-    "title": "Homebrew Cask",
-    "description": "The default casks for the package manager for everywhere",
-    "detailedDescription": "Added the pi desktop app as a Homebrew cask so it installs and upgrades like any other macOS app.",
-    "repo": "Homebrew/homebrew-cask",
-    "stars": 22274,
-    "links": [
-      {
-        "type": "github",
-        "url": "https://github.com/Homebrew/homebrew-cask"
-      }
-    ],
-    "pullRequests": [
-      {
-        "number": 290638,
-        "state": "closed",
-        "title": "pi: add cask 0.15.10",
-        "url": "https://github.com/Homebrew/homebrew-cask/pull/290638"
-      }
-    ],
-    "techStack": {
-      "ruby": true,
-      "homebrew": true
-    }
-  },
-  {
     "imageSrc": "/projectimages/contrib-splitwg.avif",
     "imageAlt": "SplitWG — WireGuard split tunnelling for macOS",
     "title": "SplitWG",
