@@ -192,8 +192,8 @@ export default function ProjectSection({
       className="relative z-10 flex flex-col justify-center py-16 md:py-24"
     >
       <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-2 mb-3 md:mb-4 md:grid md:grid-cols-[1fr_1fr] md:items-center md:gap-0">
-          <h2 className="font-display text-black text-2xl sm:text-3xl md:text-5xl leading-tight">
+        <div className="flex flex-col gap-2 mb-0 md:grid md:grid-cols-[1fr_1fr] md:items-center md:gap-0">
+          <h2 className="font-display text-black text-2xl sm:text-3xl md:text-5xl leading-[1.02]">
             {title}
           </h2>
 
@@ -210,7 +210,7 @@ export default function ProjectSection({
             </div>
           )}
         </div>
-        <div className="w-40 sm:w-44 md:w-52 h-px bg-black mb-6 md:mb-10"></div>
+        <div className="w-40 sm:w-44 md:w-52 h-px bg-black mt-[8px] mb-6 md:mb-10"></div>
       </div>
 
       {/* Carousel */}
