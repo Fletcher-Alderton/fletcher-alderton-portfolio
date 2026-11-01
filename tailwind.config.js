@@ -18,8 +18,12 @@ module.exports = {
         // Ultrawide screens (width > height * 2.33)
         'shape-ultrawide': { 'raw': '(min-aspect-ratio: 21/9)' },
       },
+      // Tailwind v4 reads the theme from src/app/globals.css (@theme inline).
+      // These mirror it so the config does not lie if it is ever wired back up.
       fontFamily: {
-        'serif': ['Instrument Serif', 'serif'],
+        'serif': ['Lay Grotesk', 'Helvetica Neue', 'Arial', 'sans-serif'],
+        'sans': ['Lay Grotesk', 'Helvetica Neue', 'Arial', 'sans-serif'],
+        'display': ['EL PACRE', 'Times New Roman', 'serif'],
       },
       spacing: {
         '18': '4.5rem',

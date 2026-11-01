@@ -193,7 +193,7 @@ export default function ProjectSection({
     >
       <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-2 mb-3 md:mb-4 md:grid md:grid-cols-[1fr_1fr] md:items-center md:gap-0">
-          <h2 className="font-serif italic text-black text-2xl sm:text-3xl md:text-5xl leading-tight">
+          <h2 className="font-display text-black text-2xl sm:text-3xl md:text-5xl leading-tight">
             {title}
           </h2>
 
@@ -201,7 +201,7 @@ export default function ProjectSection({
           {hint && (
             <div className="md:hidden">
               <SparklesText
-                className="text-sm text-black font-thin whitespace-nowrap"
+                className="text-sm text-black whitespace-nowrap"
                 colors={{ first: "#B2FF00", second: "#FF5900" }}
                 sparklesCount={5}
               >

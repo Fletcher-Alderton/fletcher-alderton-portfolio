@@ -137,7 +137,7 @@ export default function ProjectCard({
           <div className="absolute inset-0 z-20 bg-neutral-50 border border-black p-3 sm:p-5 md:p-6 flex flex-col overflow-y-auto overscroll-contain">
             {/* Title + top-right links */}
             <div className="flex items-start justify-between gap-3">
-              <h3 className="text-lg sm:text-2xl md:text-3xl font-serif text-black italic leading-tight">
+              <h3 className="text-lg sm:text-2xl md:text-3xl font-display text-black leading-tight">
                 {title}
               </h3>
               <div className="flex flex-col items-end gap-1 shrink-0">
@@ -168,7 +168,7 @@ export default function ProjectCard({
             {/* Pull requests (contributed cards) */}
             {pullRequests && pullRequests.length > 0 && (
               <div className="mt-2 sm:mt-3 shrink-0">
-                <h4 className="font-serif text-sm sm:text-base md:text-lg text-black italic">
+                <h4 className="font-serif text-sm sm:text-base md:text-lg text-black">
                   {pullRequests.length > 1 ? "My pull requests" : "My pull request"}
                 </h4>
                 <div className="h-px bg-black mb-2"></div>
@@ -208,7 +208,7 @@ export default function ProjectCard({
             {/* Tech stack */}
             {visibleTech.length > 0 && (
               <div className="mt-auto pt-2 sm:pt-3 shrink-0">
-                <h4 className="font-serif text-base md:text-lg text-black italic">
+                <h4 className="font-serif text-base md:text-lg text-black">
                   Tech stack
                 </h4>
                 <div className="h-px bg-black mb-2"></div>
@@ -262,7 +262,7 @@ export default function ProjectCard({
           <div className="flex justify-between items-end gap-2">
             <div className="min-w-0">
               <h3
-                className={`text-lg sm:text-2xl font-serif mb-1 md:mb-2 leading-tight ${
+                className={`text-lg sm:text-2xl font-display mb-1 md:mb-2 leading-tight ${
                   fill ? "text-black" : "text-white"
                 }`}
               >
