@@ -293,8 +293,8 @@ export default function Home() {
 
       {/* Header */}
       <header className={`relative z-30 px-4 sm:px-6 lg:px-8 py-4 md:py-6 ${isMenuOpen ? 'bg-neutral-50' : ''}`}>
-        <nav className="flex justify-between items-center max-w-7xl mx-auto">
-          <h1 className="text-3xl sm:text-2xl md:text-3xl font-display text-black">Fletcher Alderton</h1>
+        <nav className="flex justify-between items-end max-w-7xl mx-auto">
+          <h1 className="text-3xl sm:text-2xl md:text-3xl font-display text-black leading-none">Fletcher Alderton</h1>
           
           {/* Mobile menu button */}
           <button 
@@ -310,10 +310,10 @@ export default function Home() {
 
           {/* Desktop navigation */}
           <div className="hidden md:flex space-x-6 lg:space-x-8">
-            <a href="#info" className="text-xl lg:text-3xl font-serif text-black hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Info</a>
-            <a href="#projects" className="text-xl lg:text-3xl font-serif text-black hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Projects</a>
-            <a href="#contributions" className="text-xl lg:text-3xl font-serif text-black hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Contributions</a>
-            <a href="#contact" className="text-xl lg:text-3xl font-serif text-black hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Contact</a>
+            <a href="#info" className="text-xl lg:text-3xl font-display text-black leading-none hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Info</a>
+            <a href="#projects" className="text-xl lg:text-3xl font-display text-black leading-none hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Projects</a>
+            <a href="#contributions" className="text-xl lg:text-3xl font-display text-black leading-none hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Contributions</a>
+            <a href="#contact" className="text-xl lg:text-3xl font-display text-black leading-none hover:opacity-70 transition-opacity" style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Contact</a>
           </div>
         </nav>
 
@@ -321,15 +321,15 @@ export default function Home() {
         {isMenuOpen && (
           <div className="md:hidden absolute top-full left-0 right-0 bg-neutral-50 z-50">
             <div className="px-4 divide-y divide-black border-t border-black mx-4">
-              <a href="#info" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity py-4" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Info</a>
-              <a href="#projects" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity py-4" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Projects</a>
-              <a href="#contributions" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity py-4" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Contributions</a>
-              <a href="#contact" className="block text-2xl font-serif text-black hover:opacity-70 transition-opacity py-4" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Contact</a>
+              <a href="#info" className="block text-2xl font-display text-black hover:opacity-70 transition-opacity py-4" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Info</a>
+              <a href="#projects" className="block text-2xl font-display text-black hover:opacity-70 transition-opacity py-4" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Projects</a>
+              <a href="#contributions" className="block text-2xl font-display text-black hover:opacity-70 transition-opacity py-4" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Contributions</a>
+              <a href="#contact" className="block text-2xl font-display text-black hover:opacity-70 transition-opacity py-4" onClick={() => setIsMenuOpen(false)} style={{ cursor: 'none' }} onMouseLeave={handleMouseLeave}>Contact</a>
             </div>
           </div>
         )}
 
-        <div className={`w-full h-px bg-black mt-4 md:mt-6 max-w-7xl mx-auto ${isMenuOpen ? 'hidden' : 'block'}`}></div>
+        <div className={`w-full h-px bg-black mt-1 md:mt-1.5 max-w-7xl mx-auto ${isMenuOpen ? 'hidden' : 'block'}`}></div>
       </header>
 
       {/* About Section */}
