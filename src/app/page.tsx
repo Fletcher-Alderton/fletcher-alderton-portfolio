@@ -329,7 +329,7 @@ export default function Home() {
           </div>
         )}
 
-        <div className={`w-full h-px bg-black mt-1 md:mt-1.5 max-w-7xl mx-auto ${isMenuOpen ? 'hidden' : 'block'}`}></div>
+        <div className={`w-full h-px bg-black mt-[8px] max-w-7xl mx-auto ${isMenuOpen ? 'hidden' : 'block'}`}></div>
       </header>
 
       {/* About Section */}
@@ -349,8 +349,8 @@ export default function Home() {
             <div className={`transition-all duration-1000 ease-in-out ${
               screenShape === 'classic' ? 'max-w-xl md:mr-24' : 'max-w-2xl md:mr-8 lg:mr-16'
             }`}>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-display text-black mb-3 md:mb-4">About me!</h2>
-              <div className="w-32 sm:w-40 md:w-48 h-px bg-black mb-6 md:mb-8"></div>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-display text-black leading-none">About me!</h2>
+              <div className="w-32 sm:w-40 md:w-48 h-px bg-black mt-[8px] mb-6 md:mb-8"></div>
               <p className={`font-serif text-black leading-relaxed transition-all duration-1000 ease-in-out ${
                 screenShape === 'ultrawide' ? 'text-3xl' :
                 screenShape === 'classic' ? 'text-xl' :
@@ -397,10 +397,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto w-full relative z-10">
           {/* Header with underline - centered */}
           <div className="text-center mb-20">
-            <h2 className={`font-display text-black mb-4 transition-all duration-1000 ease-in-out ${
+            <h2 className={`font-display text-black leading-none transition-all duration-1000 ease-in-out ${
               screenShape === 'classic' ? 'text-4xl md:text-5xl' : 'text-4xl md:text-5xl'
             }`}>Get in contact</h2>
-            <div className="w-60 h-px bg-black mx-auto"></div>
+            <div className="w-60 h-px bg-black mt-[8px] mx-auto"></div>
           </div>
           
           <form className="relative">
