@@ -49,6 +49,7 @@ const TECH_ICONS: Record<string, ComponentType<IconProps>> = {
   shell: BashLight,
   homebrew: Homebrew,
   macos: AppleLight,
+  ios: AppleLight,
   objc: AppleLight,
   mcp: AnthropicLight,
   copilot: GitHubCopilotLight,
@@ -58,6 +59,7 @@ const TECH_ICONS: Record<string, ComponentType<IconProps>> = {
 const TECH_LABELS: Record<string, string> = {
   nextjs: "Next.js",
   macos: "macOS",
+  ios: "iOS",
   objc: "Objective-C",
   mcp: "MCP",
   openai: "OpenAI",

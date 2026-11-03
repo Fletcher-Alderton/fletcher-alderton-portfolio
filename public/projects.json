@@ -1,5 +1,22 @@
 [
   {
+    "imageSrc": "/projectimages/remaster.avif",
+    "imageAlt": "remaster — a Qobuz player rebuilt for the iPod touch",
+    "title": "remaster",
+    "description": "A Qobuz music player rebuilt for the iPod touch",
+    "detailedDescription": "A native UIKit player for the iPod touch running iOS 12, sized for its 320x568 screen and built like the client that should have shipped with it. Real Qobuz streaming, a parametric EQ, a live waveform, offline downloads and a true-black dark mode.",
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/Fletcher-Alderton/remaster"
+      }
+    ],
+    "techStack": {
+      "swift": true,
+      "ios": true
+    }
+  },
+  {
     "imageSrc": "/projectimages/just-save-it.avif",
     "imageAlt": "Just $ave It compound interest calculator",
     "fill": true,

@@ -1,5 +1,32 @@
 [
   {
+    "imageSrc": "/projectimages/contrib-dirac.avif",
+    "imageAlt": "Dirac coding agent",
+    "title": "Dirac",
+    "description": "A coding agent built around context curation",
+    "detailedDescription": "Steering a message into a running task without interrupting it, plus the ACP model list it advertises. My change makes the agent surface the newest OpenRouter models first instead of relying on alphabetical order, which was silently truncating the current lineup behind obsolete entries.",
+    "repo": "dirac-run/dirac",
+    "stars": 1549,
+    "links": [
+      {
+        "type": "github",
+        "url": "https://github.com/dirac-run/dirac"
+      }
+    ],
+    "pullRequests": [
+      {
+        "number": 279,
+        "state": "merged",
+        "title": "fix(acp): advertise newest OpenRouter models first",
+        "url": "https://github.com/dirac-run/dirac/pull/279"
+      }
+    ],
+    "techStack": {
+      "typescript": true,
+      "mcp": true
+    }
+  },
+  {
     "imageSrc": "/projectimages/contrib-search.avif",
     "imageAlt": "Search — a small, fast WebKit browser for macOS",
     "title": "Search",
@@ -186,6 +213,12 @@
       }
     ],
     "pullRequests": [
+      {
+        "number": 1076,
+        "state": "open",
+        "title": "Make the status menu configurable and mirror the focused app menu bar",
+        "url": "https://github.com/OmniNull/OmniWM/pull/1076"
+      },
       {
         "number": 669,
         "state": "merged",
