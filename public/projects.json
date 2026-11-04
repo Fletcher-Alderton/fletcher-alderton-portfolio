@@ -1,5 +1,28 @@
 [
   {
+    "imageSrc": "/projectimages/recosted.avif",
+    "imageAlt": "Recosted Analysis — model scores and task costs",
+    "title": "Recosted",
+    "description": "What benchmark tasks actually cost at ZDR rates",
+    "detailedDescription": "Artificial Analysis prices every task at its own list rate. Recosted re-prices the same measured workload against the cheapest zero-data-retention endpoint on OpenRouter that serves each model — 81 models, 797 endpoints — recovering the exact token counts from AA's cost decomposition and billing cached input, cache writes and output separately.",
+    "links": [
+      {
+        "type": "live",
+        "url": "https://recosted.vercel.app"
+      }
+    ],
+    "techStack": {
+      "nextjs": true,
+      "react": true,
+      "typescript": true,
+      "tailwind": true,
+      "sqlite": true,
+      "nodejs": true,
+      "python": true,
+      "vercel": true
+    }
+  },
+  {
     "imageSrc": "/projectimages/remaster.avif",
     "imageAlt": "remaster — a Qobuz player rebuilt for the iPod touch",
     "title": "remaster",

@@ -21,6 +21,9 @@ import {
   AppleLight,
   AnthropicLight,
   GitHubCopilotLight,
+  TailwindCSS,
+  SQLite,
+  Nodejs,
 } from "@ridemountainpig/svgl-react";
 
 type IconProps = { width?: number; height?: number; className?: string };
@@ -53,6 +56,9 @@ const TECH_ICONS: Record<string, ComponentType<IconProps>> = {
   objc: AppleLight,
   mcp: AnthropicLight,
   copilot: GitHubCopilotLight,
+  tailwind: TailwindCSS,
+  sqlite: SQLite,
+  nodejs: Nodejs,
 };
 
 /** Human readable labels for the chips (falls back to the raw key). */
@@ -65,6 +71,9 @@ const TECH_LABELS: Record<string, string> = {
   openai: "OpenAI",
   javascript: "JavaScript",
   typescript: "TypeScript",
+  tailwind: "Tailwind CSS",
+  sqlite: "SQLite",
+  nodejs: "Node.js",
 };
 
 export function techLabel(key: string) {
