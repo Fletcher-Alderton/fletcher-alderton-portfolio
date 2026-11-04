@@ -130,7 +130,7 @@ export const SparklesText: React.FC<SparklesTextProps> = ({
 
   return (
     <div
-      className={cn("text-6xl font-bold", className)}
+      className={cn("text-6xl font-normal", className)}
       {...props}
       style={
         {
@@ -143,7 +143,10 @@ export const SparklesText: React.FC<SparklesTextProps> = ({
         {sparkles.map((sparkle) => (
           <Sparkle key={sparkle.id} {...sparkle} />
         ))}
-        <strong>{children}</strong>
+        {/* A <strong> here requested weight 900, which Lay Grotesk does not
+            have, so the browser fell back to the one Regular cut and the
+            sparkles sat on text that was meant to look emphasised. */}
+        <span className="font-normal">{children}</span>
       </span>
     </div>
   );
