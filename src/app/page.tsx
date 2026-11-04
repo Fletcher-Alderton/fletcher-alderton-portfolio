@@ -364,7 +364,7 @@ export default function Home() {
                 Right now, I&apos;m interning at Westpac while completing my university degree, gaining hands-on experience in building scalable, real-world applications.
                 <br />
                 <br />
-                When I&apos;m not coding, you&apos;ll probably find me exploring Melbourne&apos;s coffee scene, enjoying a glass of wine with friends, or jotting down my latest dev struggles and lessons learned here on the <a href="https://mostlytech.xyz" target="_blank" rel="noopener noreferrer" className="text-black font-bold hover:text-orange-500">blog</a>.
+                When I&apos;m not coding, you&apos;ll probably find me exploring Melbourne&apos;s coffee scene, enjoying a glass of wine with friends, or jotting down my latest dev struggles and lessons learned here on the <a href="https://mostlytech.xyz" target="_blank" rel="noopener noreferrer" className="text-black underline underline-offset-4 decoration-1 hover:text-orange-500">blog</a>.
                 <br />
               </p>
             </div>

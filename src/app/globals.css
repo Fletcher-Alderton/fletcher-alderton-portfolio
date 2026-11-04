@@ -99,6 +99,11 @@ body {
   font-family: var(--font-lay-grotesk);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Lay Grotesk Regular is the only weight on the site. Without this the one
+     `font-bold` that used to sit on a body link rendered as a smeared
+     synthetic bold; anything that needs emphasis gets a rule instead. */
+  font-synthesis-weight: none;
+  font-synthesis-style: none;
 }
 
 /* EL PACRE ships one Regular cut with no bold or italic. Stop the browser
@@ -109,6 +114,10 @@ body {
     font-weight: 400;
     font-synthesis-weight: none;
     font-synthesis-style: none;
+    /* The reference site sets its display type at -0.024em. EL PACRE is cut
+       open and airy, so at the sizes used here it only reads as a display
+       face once the counters are closed up a little. Utilities still win. */
+    letter-spacing: -0.02em;
   }
 }
 
